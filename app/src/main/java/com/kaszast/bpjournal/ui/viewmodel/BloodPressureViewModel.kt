@@ -121,8 +121,10 @@ class BloodPressureViewModel(
     fun setDefaultPosition(position: BodyPosition) = userSettingsManager.setDefaultPosition(position)
     fun setAutoSync(enabled: Boolean) = userSettingsManager.setAutoSync(enabled)
     fun setMorningReminder(enabled: Boolean, time: String = userSettings.value.morningReminderTime) = userSettingsManager.setMorningReminder(enabled, time)
+    fun setNoonReminder(enabled: Boolean, time: String = userSettings.value.noonReminderTime) = userSettingsManager.setNoonReminder(enabled, time)
     fun setEveningReminder(enabled: Boolean, time: String = userSettings.value.eveningReminderTime) = userSettingsManager.setEveningReminder(enabled, time)
     fun setThemeMode(mode: AppThemeMode) = userSettingsManager.setThemeMode(mode)
+    fun setAppLanguage(language: String) = userSettingsManager.setAppLanguage(language)
 
     val healthPermissions: Array<String> get() = healthConnectHelper.healthPermissions
 

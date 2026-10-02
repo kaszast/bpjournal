@@ -47,9 +47,14 @@ import com.kaszast.bpjournal.ui.screens.ExportScreen
 import com.kaszast.bpjournal.ui.screens.HistoryScreen
 import com.kaszast.bpjournal.ui.screens.SettingsScreen
 import com.kaszast.bpjournal.ui.screens.StatisticsScreen
+import android.content.Context
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import com.kaszast.bpjournal.ui.theme.AccentTeal
 import com.kaszast.bpjournal.ui.theme.BPJournalTheme
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
+import com.kaszast.bpjournal.util.LocaleHelper
 
 class MainActivity : ComponentActivity() {
 
@@ -58,17 +63,31 @@ class MainActivity : ComponentActivity() {
         BloodPressureViewModel.Factory(app.repository, app.healthConnectHelper, app.userSettingsManager)
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("bpjournal_settings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("pref_app_language", "system") ?: "system"
+        val context = LocaleHelper.applyLanguage(newBase, lang)
+        super.attachBaseContext(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val userSettings by viewModel.userSettings.collectAsState()
+            val localizedContext = remember(userSettings.appLanguage) {
+                LocaleHelper.applyLanguage(this@MainActivity, userSettings.appLanguage)
+            }
             val isDark = when (userSettings.themeMode) {
                 AppThemeMode.SYSTEM -> isSystemInDarkTheme()
                 AppThemeMode.LIGHT -> false
                 AppThemeMode.DARK -> true
             }
-            BPJournalTheme(darkTheme = isDark) {
-                MainAppScreen(viewModel = viewModel)
+            CompositionLocalProvider(
+                LocalConfiguration provides localizedContext.resources.configuration
+            ) {
+                BPJournalTheme(darkTheme = isDark) {
+                    MainAppScreen(viewModel = viewModel)
+                }
             }
         }
     }

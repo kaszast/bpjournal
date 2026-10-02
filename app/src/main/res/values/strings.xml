@@ -60,4 +60,23 @@
     <string name="health_connect_sync_now">Sync Now</string>
     <string name="health_connect_connected">Connected</string>
     <string name="health_connect_disconnected">Not Connected</string>
+
+    <string name="reminders_title">Measurement Reminders</string>
+    <string name="reminder_morning">Morning measurement</string>
+    <string name="reminder_noon">Midday measurement</string>
+    <string name="reminder_evening">Evening measurement</string>
+    <string name="settings_measurement_defaults">Measurement Defaults</string>
+    <string name="default_arm_desc">Default arm for new entries:</string>
+    <string name="default_pos_desc">Default body position for new entries:</string>
+    <string name="settings_appearance">Appearance &amp; Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system">System</string>
+    <string name="language_hu">Magyar</string>
+    <string name="language_en">English</string>
+    <string name="modify">Change</string>
+    <string name="settings_subtitle">Measurement defaults, sync, reminders and appearance</string>
+    <string name="greeting">Good day!</string>
 </resources>

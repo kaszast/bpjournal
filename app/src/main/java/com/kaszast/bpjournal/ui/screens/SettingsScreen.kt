@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Palette
@@ -124,7 +125,7 @@ fun SettingsScreen(
                 color = SlatePrimary
             )
             Text(
-                text = "Mérési alapértelmezések, szinkronizáció és megjelenés",
+                text = stringResource(R.string.settings_subtitle),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -150,7 +151,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Mérési Alapértelmezések",
+                        text = stringResource(R.string.settings_measurement_defaults),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -161,7 +162,7 @@ fun SettingsScreen(
 
                 // Alapértelmezett kar
                 Text(
-                    text = "Alapértelmezett mérési kar új rögzítéskor:",
+                    text = stringResource(R.string.default_arm_desc),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -187,7 +188,7 @@ fun SettingsScreen(
 
                 // Alapértelmezett testhelyzet
                 Text(
-                    text = "Alapértelmezett testhelyzet új rögzítéskor:",
+                    text = stringResource(R.string.default_pos_desc),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -392,7 +393,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Mérési Emlékeztetők",
+                        text = stringResource(R.string.reminders_title),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -408,7 +409,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Reggeli mérés", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Text(text = stringResource(R.string.reminder_morning), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(2.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = userSettings.morningReminderTime, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = SlatePrimary)
@@ -422,13 +423,46 @@ fun SettingsScreen(
                                 modifier = Modifier.height(26.dp),
                                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
                             ) {
-                                Text("Módosítás", fontSize = 10.sp)
+                                Text(stringResource(R.string.modify), fontSize = 10.sp)
                             }
                         }
                     }
                     Switch(
                         checked = userSettings.morningReminderEnabled,
                         onCheckedChange = { viewModel.setMorningReminder(it) }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Déli emlékeztető
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = stringResource(R.string.reminder_noon), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = userSettings.noonReminderTime, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = SlatePrimary)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            OutlinedButton(
+                                onClick = {
+                                    showTimePicker(userSettings.noonReminderTime) { newTime ->
+                                        viewModel.setNoonReminder(userSettings.noonReminderEnabled, newTime)
+                                    }
+                                },
+                                modifier = Modifier.height(26.dp),
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
+                            ) {
+                                Text(stringResource(R.string.modify), fontSize = 10.sp)
+                            }
+                        }
+                    }
+                    Switch(
+                        checked = userSettings.noonReminderEnabled,
+                        onCheckedChange = { viewModel.setNoonReminder(it) }
                     )
                 }
 
@@ -441,7 +475,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Esti mérés", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Text(text = stringResource(R.string.reminder_evening), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(2.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = userSettings.eveningReminderTime, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = SlatePrimary)
@@ -455,7 +489,7 @@ fun SettingsScreen(
                                 modifier = Modifier.height(26.dp),
                                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
                             ) {
-                                Text("Módosítás", fontSize = 10.sp)
+                                Text(stringResource(R.string.modify), fontSize = 10.sp)
                             }
                         }
                     }
@@ -487,7 +521,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Megjelenés és Téma",
+                        text = stringResource(R.string.settings_appearance),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -501,27 +535,27 @@ fun SettingsScreen(
                         onClick = { viewModel.setThemeMode(AppThemeMode.SYSTEM) },
                         shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
                     ) {
-                        Text("Rendszer", fontSize = 11.sp)
+                        Text(stringResource(R.string.theme_system), fontSize = 11.sp)
                     }
                     SegmentedButton(
                         selected = userSettings.themeMode == AppThemeMode.LIGHT,
                         onClick = { viewModel.setThemeMode(AppThemeMode.LIGHT) },
                         shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
                     ) {
-                        Text("Világos", fontSize = 11.sp)
+                        Text(stringResource(R.string.theme_light), fontSize = 11.sp)
                     }
                     SegmentedButton(
                         selected = userSettings.themeMode == AppThemeMode.DARK,
                         onClick = { viewModel.setThemeMode(AppThemeMode.DARK) },
                         shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
                     ) {
-                        Text("Sötét", fontSize = 11.sp)
+                        Text(stringResource(R.string.theme_dark), fontSize = 11.sp)
                     }
                 }
             }
         }
 
-        // 5. Adatkezelés Kártya
+        // 5. Nyelvválasztó Kártya
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
@@ -534,14 +568,14 @@ fun SettingsScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Default.Storage,
-                        contentDescription = "Adatkezelés",
+                        imageVector = Icons.Default.Language,
+                        contentDescription = "Nyelv",
                         tint = SlatePrimary,
                         modifier = Modifier.size(22.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Adatkezelés és Tesztelés",
+                        text = stringResource(R.string.settings_language),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -549,24 +583,28 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
-
-                OutlinedButton(
-                    onClick = { viewModel.addSampleData() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("1 heti minta mérések betöltése", fontSize = 12.sp)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedButton(
-                    onClick = { viewModel.deleteAllEntries() },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text("Összes mérés törlése (Tiszta kezdés)", fontSize = 12.sp)
+                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                    SegmentedButton(
+                        selected = userSettings.appLanguage == "system",
+                        onClick = { viewModel.setAppLanguage("system") },
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
+                    ) {
+                        Text(stringResource(R.string.language_system), fontSize = 11.sp)
+                    }
+                    SegmentedButton(
+                        selected = userSettings.appLanguage == "hu",
+                        onClick = { viewModel.setAppLanguage("hu") },
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
+                    ) {
+                        Text(stringResource(R.string.language_hu), fontSize = 11.sp)
+                    }
+                    SegmentedButton(
+                        selected = userSettings.appLanguage == "en",
+                        onClick = { viewModel.setAppLanguage("en") },
+                        shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
+                    ) {
+                        Text(stringResource(R.string.language_en), fontSize = 11.sp)
+                    }
                 }
             }
         }

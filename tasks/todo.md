@@ -1,19 +1,16 @@
-# Feladatlista - UI és Funkcionális Javítások (v100)
+# Feladatlista - Beállítások, Déli emlékeztető és Nyelvválasztás (v102)
 
-- [x] 1. Verziószám frissítése 100-ra az `app/build.gradle.kts`-ben (`versionCode = 100`, `versionName = "100"`)
-- [x] 2. DashboardScreen fejlécének frissítése: profilkép törlése, verziószám chip ("v100") elhelyezése
-- [x] 3. DashboardScreen PulseRing és EshCategoryBadge igazítása:
-  - BPM szám és "BPM" felirat közelebb hozása, pontosan középre igazítva
-  - "EMELKEDETT NORMÁL" badge sormagasság szűkítése, tördelés megakadályozása
-- [x] 4. Grafikonok és statisztikák dátumformázásának regionális beállításokhoz igazítása (Locale-alapú dátumformátum)
-- [x] 5. BloodPressureCard egységesítése és PP/MAP lecserélése ST és DST jelölésre:
-  - Minden kártya azonos felépítésű legyen
-  - PP és MAP eltávolítása, helyette ST és DST mindenhol
-- [x] 6. Keresés a kódban minden előfordulásra, ahol nem a teljes Systole / Diastole szó szerepel, és ST / DST-re cserélés
-- [x] 7. StatisticsScreen: Időszakos mérések listájának tömörítése (sorok közti hézag csökkentése, egybefüggő kártya)
-- [x] 8. AddEditEntryDialog újratervezése:
-  - Görgetős dobválasztó (wheel picker) Szisztolé (ST), Diasztolé (DST) és Pulzus értékekhez
-  - Egy képernyőre igazítás görgetésmentesen, azonnal elérhető Mentés és Mégse gombokkal
-- [x] 9. Fordítás és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
-- [x] 10. Telepítés Xiaomi 15 eszközre, képernyőképek készítése és vizuális ellenőrzés
-- [ ] 11. Git commit és automatikus push a távoli tárhelyre (`origin/main`)
+- [x] 1. Verziószám frissítése 102-re az `app/build.gradle.kts`-ben (`versionCode = 102`, `versionName = "102"`)
+- [x] 2. `UserSettingsManager.kt` bővítése:
+  - Déli emlékeztető (`reminderNoonEnabled`, `reminderNoonTime`)
+  - Nyelv beállítás (`appLanguage`: system / hu / en)
+- [x] 3. Nyelvváltás infrastruktúra kialakítása (Android Locale és per-app language támogatás, LocaleHelper)
+- [x] 4. Szöveges erőforrások frissítése (`strings.xml`, `values-hu/strings.xml`)
+- [x] 5. `SettingsScreen.kt` átdolgozása:
+  - Déli emlékeztető kártya beépítése
+  - Nyelvválasztó dialógus/menü beépítése
+  - Adatkezelés és tesztelés (tesztadat generálás, összes adat törlése) teljes eltávolítása
+- [x] 6. Fordítás és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
+- [x] 7. Telepítés Xiaomi 15 eszközre, ellenőrzés képernyőképekkel (magyar és angol nézet)
+- [x] 8. Automatikus GitHub Release publikálás a v102 tag-gel és APK-val
+- [x] 9. Git commit és push a távoli repository-ba

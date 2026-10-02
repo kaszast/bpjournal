@@ -36,9 +36,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kaszast.bpjournal.R
 import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.ui.components.BloodPressureChart
 import com.kaszast.bpjournal.ui.components.EshCategoryBadge
@@ -59,9 +61,10 @@ fun DashboardScreen(
 ) {
     val entries by viewModel.entries.collectAsState()
     val chartData by viewModel.chartData.collectAsState()
+    val userSettings by viewModel.userSettings.collectAsState()
     val isDark = isSystemInDarkTheme()
 
-    val todayFormatted = remember {
+    val todayFormatted = remember(userSettings.appLanguage) {
         val now = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.getDefault())
         now.format(formatter).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
@@ -81,7 +84,7 @@ fun DashboardScreen(
             ) {
                 Column {
                     Text(
-                        text = "Jó napot kívánunk!",
+                        text = stringResource(R.string.greeting),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface

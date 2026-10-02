@@ -60,4 +60,23 @@
     <string name="health_connect_sync_now">Szinkronizálás most</string>
     <string name="health_connect_connected">Összekapcsolva</string>
     <string name="health_connect_disconnected">Nincs engedélyezve</string>
+
+    <string name="reminders_title">Mérési Emlékeztetők</string>
+    <string name="reminder_morning">Reggeli mérés</string>
+    <string name="reminder_noon">Déli mérés</string>
+    <string name="reminder_evening">Esti mérés</string>
+    <string name="settings_measurement_defaults">Mérési Alapértelmezések</string>
+    <string name="default_arm_desc">Alapértelmezett mérési kar új rögzítéskor:</string>
+    <string name="default_pos_desc">Alapértelmezett testhelyzet új rögzítéskor:</string>
+    <string name="settings_appearance">Megjelenés és Téma</string>
+    <string name="theme_system">Rendszer</string>
+    <string name="theme_light">Világos</string>
+    <string name="theme_dark">Sötét</string>
+    <string name="settings_language">Nyelv</string>
+    <string name="language_system">Rendszer</string>
+    <string name="language_hu">Magyar</string>
+    <string name="language_en">English</string>
+    <string name="modify">Módosítás</string>
+    <string name="settings_subtitle">Mérési alapértelmezések, szinkronizáció, emlékeztetők és megjelenés</string>
+    <string name="greeting">Jó napot kívánunk!</string>
 </resources>
