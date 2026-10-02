@@ -82,6 +82,10 @@ class BloodPressureDbHelper(context: Context) :
         return writableDatabase.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
     }
 
+    fun deleteAll(): Int {
+        return writableDatabase.delete(TABLE_NAME, null, null)
+    }
+
     fun getAllEntries(): List<BloodPressureEntry> {
         val entries = mutableListOf<BloodPressureEntry>()
         val cursor = readableDatabase.query(

@@ -16,6 +16,8 @@ interface BloodPressureRepository {
     suspend fun insertEntry(entry: BloodPressureEntry): Long
     suspend fun updateEntry(entry: BloodPressureEntry): Boolean
     suspend fun deleteEntry(id: Long): Boolean
+    suspend fun deleteAllEntries(): Boolean
+    suspend fun getAllEntriesSync(): List<BloodPressureEntry>
 }
 
 class BloodPressureRepositoryImpl(
@@ -39,6 +41,10 @@ class BloodPressureRepositoryImpl(
         }
     }.flowOn(ioDispatcher)
 
+    override suspend fun getAllEntriesSync(): List<BloodPressureEntry> = withContext(ioDispatcher) {
+        dbHelper.getAllEntries()
+    }
+
     override suspend fun insertEntry(entry: BloodPressureEntry): Long = withContext(ioDispatcher) {
         val id = dbHelper.insert(entry)
         dataUpdateTrigger.tryEmit(Unit)
@@ -53,6 +59,12 @@ class BloodPressureRepositoryImpl(
 
     override suspend fun deleteEntry(id: Long): Boolean = withContext(ioDispatcher) {
         val count = dbHelper.delete(id)
+        dataUpdateTrigger.tryEmit(Unit)
+        count > 0
+    }
+
+    override suspend fun deleteAllEntries(): Boolean = withContext(ioDispatcher) {
+        val count = dbHelper.deleteAll()
         dataUpdateTrigger.tryEmit(Unit)
         count > 0
     }

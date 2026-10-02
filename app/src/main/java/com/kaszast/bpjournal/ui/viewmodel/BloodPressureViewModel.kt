@@ -43,6 +43,15 @@ class BloodPressureViewModel(
             initialValue = emptyList()
         )
 
+    init {
+        viewModelScope.launch {
+            val existing = repository.getAllEntriesSync()
+            if (existing.isEmpty()) {
+                addSampleData()
+            }
+        }
+    }
+
     val summaryStats: StateFlow<SummaryStatistics> = entries.map { list ->
         BloodPressureStatisticsCalculator.calculateSummary(list)
     }.stateIn(
@@ -94,6 +103,12 @@ class BloodPressureViewModel(
     fun deleteEntry(id: Long) {
         viewModelScope.launch {
             repository.deleteEntry(id)
+        }
+    }
+
+    fun deleteAllEntries() {
+        viewModelScope.launch {
+            repository.deleteAllEntries()
         }
     }
 

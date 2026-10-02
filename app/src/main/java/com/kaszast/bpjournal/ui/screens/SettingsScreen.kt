@@ -463,6 +463,18 @@ fun SettingsScreen(
                 ) {
                     Text("1 heti minta mérések betöltése", fontSize = 12.sp)
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedButton(
+                    onClick = { viewModel.deleteAllEntries() },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Összes mérés törlése (Tiszta kezdés)", fontSize = 12.sp)
+                }
             }
         }
 
