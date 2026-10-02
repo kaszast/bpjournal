@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">BPJournal</string>
+    <string name="nav_dashboard">Áttekintés</string>
+    <string name="nav_history">Előzmények</string>
+    <string name="nav_statistics">Grafikonok</string>
+    <string name="nav_export">Exportálás</string>
+    <string name="nav_settings">Beállítások</string>
+
+    <string name="record_new">Új mérés rögzítése</string>
+    <string name="systolic">Szisztolés (Hgmm)</string>
+    <string name="diastolic">Diasztolés (Hgmm)</string>
+    <string name="pulse">Pulzus (BPM)</string>
+    <string name="date_and_time">Dátum és idő</string>
+    <string name="arm">Kar</string>
+    <string name="arm_left">Bal kar</string>
+    <string name="arm_right">Jobb kar</string>
+    <string name="body_position">Testhelyzet</string>
+    <string name="position_sitting">Ülő</string>
+    <string name="position_lying">Fekvő</string>
+    <string name="position_standing">Álló</string>
+    <string name="tags">Címkék / Körülmények</string>
+    <string name="tag_resting">Nyugalmi</string>
+    <string name="tag_post_medication">Gyógyszer után</string>
+    <string name="tag_stress">Stressz</string>
+    <string name="tag_caffeine">Koffein</string>
+    <string name="tag_exercise">Testmozgás</string>
+    <string name="notes">Megjegyzés</string>
+    <string name="save">Mentés</string>
+    <string name="cancel">Mégse</string>
+    <string name="delete">Törlés</string>
+    <string name="edit">Szerkesztés</string>
+
+    <string name="category_optimal">Optimális</string>
+    <string name="category_normal">Normál</string>
+    <string name="category_high_normal">Emelkedett normál</string>
+    <string name="category_grade1">I. fokú hipertónia</string>
+    <string name="category_grade2">II. fokú hipertónia</string>
+    <string name="category_grade3">III. fokú hipertónia</string>
+    <string name="category_isolated_systolic">Izolált szisztolés</string>
+
+    <string name="pulse_pressure">Pulzusnyomás (PP)</string>
+    <string name="mean_arterial_pressure">Középnyomás (MAP)</string>
+    <string name="latest_measurement">Legutóbbi mérés</string>
+    <string name="today_average">Mai átlag</string>
+    <string name="week_average">7 napos átlag</string>
+    <string name="month_average">30 napos átlag</string>
+    <string name="no_measurements">Még nem rögzített mérést.</string>
+    <string name="count_format">%d mérés</string>
+
+    <string name="export_title">Adatok exportálása</string>
+    <string name="export_pdf_button">Orvosi PDF lelet készítése</string>
+    <string name="export_csv_button">CSV táblázat exportálása</string>
+    <string name="export_success">Exportálás sikeres!</string>
+    <string name="export_range_all">Összes mérés</string>
+    <string name="export_range_30d">Elmúlt 30 nap</string>
+    <string name="export_range_90d">Elmúlt 90 nap</string>
+
+    <string name="health_connect_title">Health Connect szinkronizáció</string>
+    <string name="health_connect_desc">Azonnali szinkronizálás a Health Connect rendszerrel (Google Fit támogatás).</string>
+    <string name="health_connect_sync_now">Szinkronizálás most</string>
+    <string name="health_connect_connected">Összekapcsolva</string>
+    <string name="health_connect_disconnected">Nincs engedélyezve</string>
+</resources>
