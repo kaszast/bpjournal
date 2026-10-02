@@ -22,7 +22,7 @@ data class UserSettings(
     val morningReminderTime: String = "08:00",
     val eveningReminderEnabled: Boolean = false,
     val eveningReminderTime: String = "20:00",
-    val themeMode: AppThemeMode = AppThemeMode.SYSTEM
+    val themeMode: AppThemeMode = AppThemeMode.LIGHT
 )
 
 class UserSettingsManager(context: Context) {
@@ -35,7 +35,7 @@ class UserSettingsManager(context: Context) {
     private fun loadSettings(): UserSettings {
         val armStr = prefs.getString(KEY_DEFAULT_ARM, Arm.LEFT.name) ?: Arm.LEFT.name
         val posStr = prefs.getString(KEY_DEFAULT_POS, BodyPosition.SITTING.name) ?: BodyPosition.SITTING.name
-        val themeStr = prefs.getString(KEY_THEME_MODE, AppThemeMode.SYSTEM.name) ?: AppThemeMode.SYSTEM.name
+        val themeStr = prefs.getString(KEY_THEME_MODE, AppThemeMode.LIGHT.name) ?: AppThemeMode.LIGHT.name
 
         return UserSettings(
             defaultArm = runCatching { Arm.valueOf(armStr) }.getOrDefault(Arm.LEFT),
@@ -45,7 +45,7 @@ class UserSettingsManager(context: Context) {
             morningReminderTime = prefs.getString(KEY_REMINDER_MORNING_TIME, "08:00") ?: "08:00",
             eveningReminderEnabled = prefs.getBoolean(KEY_REMINDER_EVENING_ENABLED, false),
             eveningReminderTime = prefs.getString(KEY_REMINDER_EVENING_TIME, "20:00") ?: "20:00",
-            themeMode = runCatching { AppThemeMode.valueOf(themeStr) }.getOrDefault(AppThemeMode.SYSTEM)
+            themeMode = runCatching { AppThemeMode.valueOf(themeStr) }.getOrDefault(AppThemeMode.LIGHT)
         )
     }
 

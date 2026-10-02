@@ -71,4 +71,12 @@ data class BloodPressureEntry(
     fun formattedDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")): String {
         return localDateTime.format(formatter)
     }
+
+    fun formattedDate(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d", java.util.Locale.getDefault())): String {
+        return localDateTime.format(formatter)
+    }
+
+    fun formattedTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")): String {
+        return localDateTime.format(formatter)
+    }
 }

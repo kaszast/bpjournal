@@ -57,34 +57,39 @@ fun BloodPressureChart(
                 .fillMaxWidth()
                 .padding(18.dp)
         ) {
-            // Fejléc és Jelmagyarázat
+            // 1. Sor: Cím és időszak
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = "Vérnyomás Trendek",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "Dinamika és célértékek",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    ChartLegend(color = sysColor, label = "Szisztolés")
-                    Spacer(modifier = Modifier.width(12.dp))
-                    ChartLegend(color = diaColor, label = "Diasztolés")
-                }
+                Text(
+                    text = "Vérnyomás trendek",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "(elmúlt 7 nap)",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // 2. Sor: Jelmagyarázat külön sorban
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ChartLegend(color = sysColor, label = "Szisztolés")
+                Spacer(modifier = Modifier.width(18.dp))
+                ChartLegend(color = diaColor, label = "Diasztolés")
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             if (dataPoints.isEmpty()) {
                 Box(
