@@ -14,10 +14,14 @@ class BPJournalApplication : Application() {
     lateinit var healthConnectHelper: HealthConnectHelper
         private set
 
+    lateinit var userSettingsManager: com.kaszast.bpjournal.data.UserSettingsManager
+        private set
+
     override fun onCreate() {
         super.onCreate()
         val dbHelper = BloodPressureDbHelper(this)
         repository = BloodPressureRepositoryImpl(dbHelper)
         healthConnectHelper = HealthConnectHelper(this)
+        userSettingsManager = com.kaszast.bpjournal.data.UserSettingsManager(this)
     }
 }

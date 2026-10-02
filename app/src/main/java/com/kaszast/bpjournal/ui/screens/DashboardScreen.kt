@@ -196,8 +196,12 @@ fun DashboardScreen(
         }
     }
 
+    val userSettings by viewModel.userSettings.collectAsState()
+
     if (showAddDialog) {
         AddEditEntryDialog(
+            defaultArm = userSettings.defaultArm,
+            defaultPosition = userSettings.defaultPosition,
             onDismiss = { showAddDialog = false },
             onSave = { entry ->
                 viewModel.addEntry(entry)

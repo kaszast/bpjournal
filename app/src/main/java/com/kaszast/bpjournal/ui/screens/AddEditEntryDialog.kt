@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,11 +28,21 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Update
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,20 +53,29 @@ import com.kaszast.bpjournal.R
 import com.kaszast.bpjournal.model.Arm
 import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.model.BodyPosition
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddEditEntryDialog(
     initialEntry: BloodPressureEntry? = null,
+    defaultArm: Arm = Arm.LEFT,
+    defaultPosition: BodyPosition = BodyPosition.SITTING,
     onDismiss: () -> Unit,
     onSave: (BloodPressureEntry) -> Unit
 ) {
+    val context = LocalContext.current
+    var selectedTimestamp by remember { mutableLongStateOf(initialEntry?.timestamp ?: System.currentTimeMillis()) }
     var systolicText by remember { mutableStateOf(initialEntry?.systolic?.toString() ?: "120") }
     var diastolicText by remember { mutableStateOf(initialEntry?.diastolic?.toString() ?: "80") }
     var pulseText by remember { mutableStateOf(initialEntry?.pulse?.toString() ?: "72") }
 
-    var selectedArm by remember { mutableStateOf(initialEntry?.arm ?: Arm.LEFT) }
-    var selectedPosition by remember { mutableStateOf(initialEntry?.position ?: BodyPosition.SITTING) }
+    var selectedArm by remember { mutableStateOf(initialEntry?.arm ?: defaultArm) }
+    var selectedPosition by remember { mutableStateOf(initialEntry?.position ?: defaultPosition) }
     var selectedTags by remember { mutableStateOf(initialEntry?.tags ?: setOf("Nyugalmi")) }
     var notesText by remember { mutableStateOf(initialEntry?.notes ?: "") }
 
@@ -94,6 +114,98 @@ fun AddEditEntryDialog(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Dátum és Idő kiválasztása
+                val calendar = remember(selectedTimestamp) {
+                    Calendar.getInstance().apply { timeInMillis = selectedTimestamp }
+                }
+                val formattedDateTime = remember(selectedTimestamp) {
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(selectedTimestamp), ZoneId.systemDefault())
+                        .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+                }
+
+                Card(
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = stringResource(R.string.date_and_time),
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = formattedDateTime,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            OutlinedButton(
+                                onClick = {
+                                    DatePickerDialog(
+                                        context,
+                                        { _, year, month, dayOfMonth ->
+                                            TimePickerDialog(
+                                                context,
+                                                { _, hourOfDay, minute ->
+                                                    val newCal = Calendar.getInstance().apply {
+                                                        set(Calendar.YEAR, year)
+                                                        set(Calendar.MONTH, month)
+                                                        set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                                                        set(Calendar.HOUR_OF_DAY, hourOfDay)
+                                                        set(Calendar.MINUTE, minute)
+                                                        set(Calendar.SECOND, 0)
+                                                    }
+                                                    selectedTimestamp = newCal.timeInMillis
+                                                },
+                                                calendar.get(Calendar.HOUR_OF_DAY),
+                                                calendar.get(Calendar.MINUTE),
+                                                true
+                                            ).show()
+                                        },
+                                        calendar.get(Calendar.YEAR),
+                                        calendar.get(Calendar.MONTH),
+                                        calendar.get(Calendar.DAY_OF_MONTH)
+                                    ).show()
+                                },
+                                modifier = Modifier.height(36.dp),
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.CalendarMonth,
+                                    contentDescription = "Módosítás",
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = "Módosítás", fontSize = 12.sp)
+                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            IconButton(
+                                onClick = { selectedTimestamp = System.currentTimeMillis() },
+                                modifier = Modifier.size(36.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Update,
+                                    contentDescription = "Most",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -247,7 +359,7 @@ fun AddEditEntryDialog(
                                 systolic = systolicText.toInt(),
                                 diastolic = diastolicText.toInt(),
                                 pulse = pulseText.toInt(),
-                                timestamp = initialEntry?.timestamp ?: System.currentTimeMillis(),
+                                timestamp = selectedTimestamp,
                                 arm = selectedArm,
                                 position = selectedPosition,
                                 tags = selectedTags,

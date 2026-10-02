@@ -33,17 +33,27 @@ import com.kaszast.bpjournal.ui.screens.StatisticsScreen
 import com.kaszast.bpjournal.ui.theme.BPJournalTheme
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import com.kaszast.bpjournal.data.AppThemeMode
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BloodPressureViewModel by viewModels {
         val app = application as BPJournalApplication
-        BloodPressureViewModel.Factory(app.repository, app.healthConnectHelper)
+        BloodPressureViewModel.Factory(app.repository, app.healthConnectHelper, app.userSettingsManager)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BPJournalTheme {
+            val userSettings by viewModel.userSettings.collectAsState()
+            val isDark = when (userSettings.themeMode) {
+                AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+                AppThemeMode.LIGHT -> false
+                AppThemeMode.DARK -> true
+            }
+            BPJournalTheme(darkTheme = isDark) {
                 MainAppScreen(viewModel = viewModel)
             }
         }
@@ -73,9 +83,8 @@ fun MainAppScreen(viewModel: BloodPressureViewModel) {
                         icon = {
                             Icon(imageVector = item.second, contentDescription = stringResource(item.first))
                         },
-                        label = {
-                            Text(text = stringResource(item.first), fontSize = 10.sp)
-                        }
+                        label = null,
+                        alwaysShowLabel = false
                     )
                 }
             }
