@@ -66,7 +66,10 @@ fun EshCategoryBadge(
             color = bgColor,
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
-            letterSpacing = 0.3.sp
+            letterSpacing = 0.3.sp,
+            lineHeight = 11.sp,
+            maxLines = 1,
+            softWrap = false
         )
     }
 }

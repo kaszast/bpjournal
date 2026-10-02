@@ -102,7 +102,7 @@ object PdfReportExporter {
 
         val headerY = currentY + 14f
         canvas.drawText("Időpont", MARGIN + 6f, headerY, paint)
-        canvas.drawText("Vérnyomás (Hgmm)", MARGIN + 90f, headerY, paint)
+        canvas.drawText("Vérnyomás (ST / DST Hgmm)", MARGIN + 85f, headerY, paint)
         canvas.drawText("Pulzus", MARGIN + 190f, headerY, paint)
         canvas.drawText("Kar / Poz.", MARGIN + 235f, headerY, paint)
         canvas.drawText("Kategória (ESH)", MARGIN + 300f, headerY, paint)

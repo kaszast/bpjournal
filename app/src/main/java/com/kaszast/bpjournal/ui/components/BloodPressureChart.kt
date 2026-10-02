@@ -210,7 +210,7 @@ fun BloodPressureChart(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = dataPoints.first().periodLabel.takeLast(5),
+                    text = dataPoints.first().shortLabel.ifEmpty { dataPoints.first().periodLabel },
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -223,7 +223,7 @@ fun BloodPressureChart(
                 )
                 if (dataPoints.size > 1) {
                     Text(
-                        text = dataPoints.last().periodLabel.takeLast(5),
+                        text = dataPoints.last().shortLabel.ifEmpty { dataPoints.last().periodLabel },
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant

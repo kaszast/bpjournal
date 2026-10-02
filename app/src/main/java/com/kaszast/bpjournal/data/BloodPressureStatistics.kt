@@ -8,6 +8,7 @@ import java.time.temporal.IsoFields
 
 data class AggregatedAverage(
     val periodLabel: String,
+    val shortLabel: String = "",
     val averageSystolic: Double,
     val averageDiastolic: Double,
     val averagePulse: Double,
@@ -76,18 +77,40 @@ object BloodPressureStatisticsCalculator {
         )
     }
 
+    private fun getLocalizedShortDatePattern(locale: java.util.Locale): String {
+        return when (locale.language) {
+            "hu" -> "MM. dd."
+            "de", "pl", "cs", "sk", "ru" -> "dd.MM."
+            "en" -> if (locale.country == "GB" || locale.country == "AU") "d/M" else "M/d"
+            "fr", "es", "it", "pt" -> "dd/MM"
+            else -> "MM/dd"
+        }
+    }
+
+    private fun getLocalizedMonthPattern(locale: java.util.Locale): String {
+        return when (locale.language) {
+            "hu" -> "yyyy. MMM"
+            else -> "MMM yyyy"
+        }
+    }
+
     /**
-     * Napi csoportosítás és átlagok
+     * Napi csoportosítás és átlagok regionális dátumformázással
      */
     fun calculateDailyAverages(entries: List<BloodPressureEntry>): List<AggregatedAverage> {
         val zone = ZoneId.systemDefault()
+        val locale = java.util.Locale.getDefault()
+        val fullDateFormatter = java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM).withLocale(locale)
+        val shortDateFormatter = java.time.format.DateTimeFormatter.ofPattern(getLocalizedShortDatePattern(locale), locale)
+
         return entries
             .groupBy { entry ->
                 entry.localDateTime.toLocalDate()
             }
             .map { (date, dayEntries) ->
                 AggregatedAverage(
-                    periodLabel = date.toString(),
+                    periodLabel = date.format(fullDateFormatter),
+                    shortLabel = date.format(shortDateFormatter),
                     averageSystolic = dayEntries.map { it.systolic }.average(),
                     averageDiastolic = dayEntries.map { it.diastolic }.average(),
                     averagePulse = dayEntries.map { it.pulse }.average(),
@@ -102,15 +125,22 @@ object BloodPressureStatisticsCalculator {
      * Heti csoportosítás és átlagok
      */
     fun calculateWeeklyAverages(entries: List<BloodPressureEntry>): List<AggregatedAverage> {
+        val locale = java.util.Locale.getDefault()
         return entries
             .groupBy { entry ->
                 val date = entry.localDateTime.toLocalDate()
                 "${date.year}-W${date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)}"
             }
-            .map { (weekLabel, weekEntries) ->
+            .map { (_, weekEntries) ->
                 val representativeTimestamp = weekEntries.minOf { it.timestamp }
+                val date = weekEntries.first().localDateTime.toLocalDate()
+                val weekNum = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
+                val fullLabel = if (locale.language == "hu") "${date.year}. ${weekNum}. hét" else "Week $weekNum, ${date.year}"
+                val shortLabel = if (locale.language == "hu") "${weekNum}. hét" else "W$weekNum"
+
                 AggregatedAverage(
-                    periodLabel = weekLabel,
+                    periodLabel = fullLabel,
+                    shortLabel = shortLabel,
                     averageSystolic = weekEntries.map { it.systolic }.average(),
                     averageDiastolic = weekEntries.map { it.diastolic }.average(),
                     averagePulse = weekEntries.map { it.pulse }.average(),
@@ -125,15 +155,22 @@ object BloodPressureStatisticsCalculator {
      * Havi csoportosítás és átlagok
      */
     fun calculateMonthlyAverages(entries: List<BloodPressureEntry>): List<AggregatedAverage> {
+        val locale = java.util.Locale.getDefault()
+        val fullMonthFormatter = java.time.format.DateTimeFormatter.ofPattern(getLocalizedMonthPattern(locale), locale)
+        val shortMonthFormatter = java.time.format.DateTimeFormatter.ofPattern("MMM", locale)
+
         return entries
             .groupBy { entry ->
                 val date = entry.localDateTime.toLocalDate()
                 "${date.year}-${String.format("%02d", date.monthValue)}"
             }
-            .map { (monthLabel, monthEntries) ->
+            .map { (_, monthEntries) ->
                 val representativeTimestamp = monthEntries.minOf { it.timestamp }
+                val date = monthEntries.first().localDateTime.toLocalDate()
+
                 AggregatedAverage(
-                    periodLabel = monthLabel,
+                    periodLabel = date.format(fullMonthFormatter),
+                    shortLabel = date.format(shortMonthFormatter),
                     averageSystolic = monthEntries.map { it.systolic }.average(),
                     averageDiastolic = monthEntries.map { it.diastolic }.average(),
                     averagePulse = monthEntries.map { it.pulse }.average(),

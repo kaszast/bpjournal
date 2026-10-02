@@ -94,17 +94,19 @@ fun DashboardScreen(
                     )
                 }
 
-                IconButton(
-                    onClick = onNavigateToSettings,
+                Box(
                     modifier = Modifier
-                        .size(42.dp)
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), CircleShape)
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                            RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 10.dp, vertical = 6.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "Beállítások",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(26.dp)
+                    Text(
+                        text = "v${com.kaszast.bpjournal.BuildConfig.VERSION_NAME}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -138,7 +140,7 @@ fun DashboardScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                text = latest.formattedDateTime().takeLast(5),
+                                text = latest.formattedTime(),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -356,14 +358,15 @@ private fun RecentReadingsCard(
                             )
                         }
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(horizontalAlignment = Alignment.End) {
                             Text(
-                                text = "${entry.systolic} / ${entry.diastolic}",
-                                fontSize = 15.sp,
+                                text = "ST ${entry.systolic} / DST ${entry.diastolic}",
+                                fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurface,
+                                softWrap = false
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.height(3.dp))
                             EshCategoryBadge(category = entry.category)
                         }
                     }

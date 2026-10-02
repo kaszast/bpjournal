@@ -68,15 +68,21 @@ data class BloodPressureEntry(
     val localDateTime: LocalDateTime
         get() = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
 
-    fun formattedDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")): String {
+    fun formattedDateTime(): String {
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
+            .withLocale(java.util.Locale.getDefault())
         return localDateTime.format(formatter)
     }
 
-    fun formattedDate(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d", java.util.Locale.getDefault())): String {
+    fun formattedDate(): String {
+        val formatter = DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM)
+            .withLocale(java.util.Locale.getDefault())
         return localDateTime.format(formatter)
     }
 
-    fun formattedTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")): String {
+    fun formattedTime(): String {
+        val formatter = DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT)
+            .withLocale(java.util.Locale.getDefault())
         return localDateTime.format(formatter)
     }
 }

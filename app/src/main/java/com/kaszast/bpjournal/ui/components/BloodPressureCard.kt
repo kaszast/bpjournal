@@ -117,33 +117,44 @@ fun BloodPressureCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // 2. Sor: Nagy Számok (122 / 79 Hgmm) és Pulzus (69 BPM)
+            // 2. Sor: ST és DST értékek és Pulzus (BPM)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Bal oldal: 122 / 79 Hgmm
+                // Bal oldal: ST 122  DST 79 Hgmm
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        text = "${entry.systolic}",
-                        fontSize = 24.sp,
+                        text = "ST",
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = " / ",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Light,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "${entry.diastolic}",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 2.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "${entry.systolic}",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = "DST",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "${entry.diastolic}",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Hgmm",
                         fontSize = 11.sp,
@@ -179,20 +190,8 @@ fun BloodPressureCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // 3. Sor: Kategória kapszula és keringési indexek (PP, MAP)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                EshCategoryBadge(category = entry.category)
-                Text(
-                    text = "PP: ${entry.pulsePressure} • MAP: ${entry.meanArterialPressure}",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            // 3. Sor: Kategória kapszula
+            EshCategoryBadge(category = entry.category)
 
             // 4. Sor: Címkék és megjegyzés ha van
             if (entry.notes.isNotBlank() || entry.tags.isNotEmpty()) {
