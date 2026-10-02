@@ -3,6 +3,7 @@ package com.kaszast.bpjournal
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -77,6 +79,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             val userSettings by viewModel.userSettings.collectAsState()
@@ -145,33 +148,39 @@ fun MainAppScreen(viewModel: BloodPressureViewModel) {
                 color = MaterialTheme.colorScheme.surface,
                 shadowElevation = 8.dp
             ) {
-                Row(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
+                        .navigationBarsPadding()
                 ) {
-                    val navTabs = listOf(
-                        Triple(0, Icons.Default.Dashboard, R.string.nav_dashboard),
-                        Triple(1, Icons.Default.History, R.string.nav_history),
-                        Triple(2, Icons.Default.BarChart, R.string.nav_statistics),
-                        Triple(3, Icons.Default.IosShare, R.string.nav_export),
-                        Triple(4, Icons.Default.Settings, R.string.nav_settings)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val navTabs = listOf(
+                            Triple(0, Icons.Default.Dashboard, R.string.nav_dashboard),
+                            Triple(1, Icons.Default.History, R.string.nav_history),
+                            Triple(2, Icons.Default.BarChart, R.string.nav_statistics),
+                            Triple(3, Icons.Default.IosShare, R.string.nav_export),
+                            Triple(4, Icons.Default.Settings, R.string.nav_settings)
+                        )
 
-                    navTabs.forEach { (index, icon, labelRes) ->
-                        IconButton(
-                            onClick = { selectedTab = index },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = stringResource(labelRes),
-                                tint = if (selectedTab == index) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                                modifier = Modifier.size(24.dp)
-                            )
+                        navTabs.forEach { (index, icon, labelRes) ->
+                            IconButton(
+                                onClick = { selectedTab = index },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = stringResource(labelRes),
+                                    tint = if (selectedTab == index) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
                         }
                     }
                 }

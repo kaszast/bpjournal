@@ -1,8 +1,8 @@
-# Feladatlista - Beállítások Ikon Lefagyás Javítása (v106)
+# Feladatlista - Samsung 3-gombos Navigáció Átfedés Javítása (v107)
 
-- [x] 1. Hiba javítása `MainActivity.kt`-ban: `LocalizedActivityContext` és `LocalActivityResultRegistryOwner provides this@MainActivity`
-- [x] 2. Verziószám léptetése 106-ra (`app/build.gradle.kts`: versionCode = 106, versionName = "106")
+- [x] 1. `MainActivity.kt`: `enableEdgeToEdge()` beállítása és `navigationBarsPadding()` hozzáadása a `bottomBar` felületéhez (`Surface` -> `Box` -> `Row`)
+- [x] 2. `app/build.gradle.kts`: Verziószám léptetése 107-re (`versionCode = 107`, `versionName = "107"`)
 - [x] 3. Egységtesztek futtatása és release/debug APK fordítása (`./gradlew testDebugUnitTest assembleDebug assembleRelease`)
-- [x] 4. Telepítés a csatlakoztatott Xiaomi 15 készülékre és SettingsScreen tesztelése (kattintás a beállítások ikonra, crash hiányának és a képernyő megjelenésének igazolása)
-- [x] 5. GitHub Release és APK feltöltés a v106 taggel (`scripts/publish_release.py`)
-- [x] 6. Git commit és push a távoli tárba
+- [x] 4. Telepítés és tesztelés valós eszközön
+- [ ] 5. GitHub Release publikálás a v107 taggel és APK-val (`scripts/publish_release.py`)
+- [ ] 6. Git commit és push
