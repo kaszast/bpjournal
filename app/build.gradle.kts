@@ -11,8 +11,8 @@ android {
     applicationId = "com.kaszast.bpjournal"
     minSdk = 26
     targetSdk = 36
-    versionCode = 100
-    versionName = "100"
+    versionCode = 101
+    versionName = "101"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }

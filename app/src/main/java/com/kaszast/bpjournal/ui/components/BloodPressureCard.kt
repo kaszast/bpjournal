@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kaszast.bpjournal.R
@@ -65,50 +66,57 @@ fun BloodPressureCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        text = entry.formattedDateTime(),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "•",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    )
-                    Text(
-                        text = "${if (entry.arm == Arm.LEFT) "Bal kar" else "Jobb kar"} (${when (entry.position) {
-                            BodyPosition.SITTING -> "ülő"
-                            BodyPosition.LYING -> "fekvő"
-                            BodyPosition.STANDING -> "álló"
-                        }})",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = entry.formattedDateTime(),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "•",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        )
+                        Text(
+                            text = "${if (entry.arm == Arm.LEFT) "Bal kar" else "Jobb kar"} (${when (entry.position) {
+                                BodyPosition.SITTING -> "ülő"
+                                BodyPosition.LYING -> "fekvő"
+                                BodyPosition.STANDING -> "álló"
+                            }})",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
                     if (onEditClick != null) {
-                        IconButton(onClick = onEditClick, modifier = Modifier.size(24.dp)) {
+                        IconButton(onClick = onEditClick, modifier = Modifier.size(36.dp)) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = stringResource(R.string.edit),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(14.dp)
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
                     if (onDeleteClick != null) {
-                        IconButton(onClick = onDeleteClick, modifier = Modifier.size(24.dp)) {
+                        IconButton(onClick = onDeleteClick, modifier = Modifier.size(36.dp)) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = stringResource(R.string.delete),
-                                tint = Color(0xFFEF4444).copy(alpha = 0.8f),
-                                modifier = Modifier.size(14.dp)
+                                tint = Color(0xFFEF4444),
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }

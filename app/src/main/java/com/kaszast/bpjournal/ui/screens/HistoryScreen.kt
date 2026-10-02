@@ -16,9 +16,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +51,7 @@ fun HistoryScreen(
     val entries by viewModel.entries.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     var editingEntry by remember { mutableStateOf<BloodPressureEntry?>(null) }
+    var entryToDelete by remember { mutableStateOf<BloodPressureEntry?>(null) }
 
     val filteredEntries = remember(entries, searchQuery) {
         if (searchQuery.isBlank()) {
@@ -139,7 +145,7 @@ fun HistoryScreen(
                     BloodPressureCard(
                         entry = entry,
                         onEditClick = { editingEntry = entry },
-                        onDeleteClick = { viewModel.deleteEntry(entry.id) }
+                        onDeleteClick = { entryToDelete = entry }
                     )
                 }
             }
@@ -157,6 +163,43 @@ fun HistoryScreen(
             onSave = { updated ->
                 viewModel.updateEntry(updated)
                 editingEntry = null
+            }
+        )
+    }
+
+    entryToDelete?.let { entry ->
+        AlertDialog(
+            onDismissRequest = { entryToDelete = null },
+            title = {
+                Text(
+                    text = "Mérés törlése",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                Text(
+                    text = "Biztosan törölni szeretné ezt a mérést?\n\n${entry.formattedDateTime()} • ST ${entry.systolic} / DST ${entry.diastolic} Hgmm (Pulzus: ${entry.pulse} BPM)",
+                    fontSize = 14.sp
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteEntry(entry.id)
+                        entryToDelete = null
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFEF4444)
+                    )
+                ) {
+                    Text(stringResource(R.string.delete))
+                }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { entryToDelete = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
             }
         )
     }
