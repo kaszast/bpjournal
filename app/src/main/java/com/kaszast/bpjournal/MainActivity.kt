@@ -48,6 +48,12 @@ import com.kaszast.bpjournal.ui.screens.HistoryScreen
 import com.kaszast.bpjournal.ui.screens.SettingsScreen
 import com.kaszast.bpjournal.ui.screens.StatisticsScreen
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.res.AssetManager
+import android.content.res.Resources
+import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -75,7 +81,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val userSettings by viewModel.userSettings.collectAsState()
             val localizedContext = remember(userSettings.appLanguage) {
-                LocaleHelper.applyLanguage(this@MainActivity, userSettings.appLanguage)
+                val configContext = LocaleHelper.applyLanguage(this@MainActivity, userSettings.appLanguage)
+                LocalizedActivityContext(this@MainActivity, configContext)
             }
             val isDark = when (userSettings.themeMode) {
                 AppThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -84,7 +91,8 @@ class MainActivity : ComponentActivity() {
             }
             CompositionLocalProvider(
                 LocalConfiguration provides localizedContext.resources.configuration,
-                LocalContext provides localizedContext
+                LocalContext provides localizedContext,
+                LocalActivityResultRegistryOwner provides this@MainActivity
             ) {
                 BPJournalTheme(darkTheme = isDark) {
                     MainAppScreen(viewModel = viewModel)
@@ -92,6 +100,18 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+/**
+ * ContextWrapper wrapping the [ComponentActivity] to supply localized resources and configuration
+ * while retaining all Activity capabilities (window tokens, themes, [ActivityResultRegistryOwner]).
+ */
+private class LocalizedActivityContext(
+    activity: ComponentActivity,
+    private val configContext: Context
+) : ContextWrapper(activity), ActivityResultRegistryOwner by activity {
+    override fun getResources(): Resources = configContext.resources
+    override fun getAssets(): AssetManager = configContext.assets
 }
 
 @Composable
