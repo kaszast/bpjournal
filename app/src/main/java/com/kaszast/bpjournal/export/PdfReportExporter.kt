@@ -14,16 +14,34 @@ import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * Clinical PDF report generation utility using Android's native [PdfDocument] canvas API.
+ *
+ * Formats data into a professional medical dossier compliant with standard A4 paper dimensions:
+ * - Statistical executive summary (Systolic/Diastolic/Pulse averages, min/max values, distribution percentages).
+ * - Multi-page pagination when measurements exceed the page boundary.
+ * - Tabular breakdown with color-coded ESH category indicators.
+ * - Exports directly to app-private cache directory, ready for secure sharing via Android's [FileProvider].
+ */
 object PdfReportExporter {
 
-    private const val PAGE_WIDTH = 595 // A4 width in points
-    private const val PAGE_HEIGHT = 842 // A4 height in points
+    private const val PAGE_WIDTH = 595 // Standard ISO A4 width in typography points (72 dpi)
+    private const val PAGE_HEIGHT = 842 // Standard ISO A4 height in typography points (72 dpi)
     private const val MARGIN = 36f
 
+    /**
+     * Generates a printable A4 PDF medical report from the given list of entries.
+     *
+     * @param context Application context used to resolve cache file path.
+     * @param entries List of blood pressure records to include.
+     * @param reportTitle Document header title.
+     * @param filename Target PDF file name in cache directory.
+     * @return Generated [File] ready for viewing or sharing.
+     */
     fun exportToPdf(
         context: Context,
         entries: List<BloodPressureEntry>,
-        reportTitle: String = "BPJournal - Vérnyomás Lelet",
+        reportTitle: String = "BPJournal - Medical Report",
         filename: String = "bpjournal_report.pdf"
     ): File {
         val pdfDocument = PdfDocument()

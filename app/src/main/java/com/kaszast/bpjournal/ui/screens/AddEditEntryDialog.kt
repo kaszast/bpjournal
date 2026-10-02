@@ -67,6 +67,15 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlinx.coroutines.launch
 
+/**
+ * Dialog for creating or modifying blood pressure measurements.
+ *
+ * Optimized for ergonomics:
+ * - Fitted into a single screen viewport without vertical scroll barriers.
+ * - Employs smooth wheel pickers ([WheelPicker]) for Systolic (ST), Diastolic (DST), and Pulse (BPM).
+ * - Interactive timestamp chip opening native [DatePickerDialog] and [TimePickerDialog].
+ * - Segmented pickers for arm and posture; multi-select chips for clinical context tags.
+ */
 @Composable
 fun AddEditEntryDialog(
     initialEntry: BloodPressureEntry? = null,
@@ -384,6 +393,18 @@ fun AddEditEntryDialog(
     }
 }
 
+/**
+ * Reusable snap-fling scrollable wheel picker for selecting numeric values within an integer range.
+ *
+ * Employs [rememberSnapFlingBehavior] with a [LazyColumn] to snap smoothly to each number.
+ * Displays a center highlight band and scales the selected item text.
+ *
+ * @param range The selectable range of numbers (e.g. 60..260).
+ * @param value Currently selected integer value.
+ * @param onValueChange Callback invoked when a new number snaps into focus.
+ * @param label Metric abbreviation header (ST, DST, Pulzus).
+ * @param unit Unit label (Hgmm, BPM).
+ */
 @Composable
 private fun NumberWheelPicker(
     range: IntRange,

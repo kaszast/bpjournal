@@ -71,6 +71,17 @@ import com.kaszast.bpjournal.ui.theme.SlatePrimary
 import com.kaszast.bpjournal.ui.theme.TealSecondary
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
 
+/**
+ * Settings tab screen managing user configurations, integrations, and customization.
+ *
+ * Configurable domains:
+ * - Measurement defaults: pre-selected arm and body posture.
+ * - Health Connect: permission checks, automatic background syncing toggle, manual full batch sync.
+ * - Measurement reminders: discrete morning, midday (noon), and evening triggers with native [TimePickerDialog].
+ * - Appearance & theme: system default, light, or dark mode.
+ * - Language: dynamic in-app language switching between System Default, Hungarian (hu), and English (en).
+ * - Clinical reference table: official ESH/ESC guideline thresholds for systolic and diastolic ranges.
+ */
 @Composable
 fun SettingsScreen(
     viewModel: BloodPressureViewModel

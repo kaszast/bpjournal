@@ -44,6 +44,15 @@ import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.ui.components.BloodPressureCard
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
 
+/**
+ * History tab screen presenting a chronological feed of blood pressure measurements.
+ *
+ * Capabilities:
+ * - Real-time text search query filtering entries by notes, tags, or ESH category names.
+ * - Uniform measurement cards with interactive action triggers.
+ * - In-place editing modal dialog via [AddEditEntryDialog].
+ * - Secure deletion with an explicit confirmation [AlertDialog] verifying record details before permanent removal.
+ */
 @Composable
 fun HistoryScreen(
     viewModel: BloodPressureViewModel

@@ -37,6 +37,20 @@ import com.kaszast.bpjournal.model.BodyPosition
 import com.kaszast.bpjournal.ui.theme.AccentMint
 import com.kaszast.bpjournal.ui.theme.DarkPulseTeal
 
+/**
+ * Reusable measurement card component presenting a single blood pressure record.
+ *
+ * Features:
+ * - Clear systolic (ST) and diastolic (DST) readings in mmHg.
+ * - Heart rate (pulse in BPM) display with themed pulse icon.
+ * - ESH category classification badge ([EshCategoryBadge]).
+ * - Contextual metadata: date, time, arm, posture, tags, and notes.
+ * - Action buttons: enlarged edit and delete triggers with appropriate touch targets.
+ *
+ * @param entry The [BloodPressureEntry] record to render.
+ * @param onEditClick Optional callback triggered when user taps the edit icon.
+ * @param onDeleteClick Optional callback triggered when user taps the delete icon.
+ */
 @Composable
 fun BloodPressureCard(
     entry: BloodPressureEntry,

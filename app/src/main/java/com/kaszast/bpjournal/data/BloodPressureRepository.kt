@@ -10,6 +10,12 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
+/**
+ * Repository interface providing reactive data access and mutations for blood pressure records.
+ *
+ * Exposes thread-safe [Flow] streams that automatically emit fresh data whenever
+ * underlying records are inserted, updated, or deleted.
+ */
 interface BloodPressureRepository {
     fun getAllEntries(): Flow<List<BloodPressureEntry>>
     fun getEntriesInRange(startTime: Long, endTime: Long): Flow<List<BloodPressureEntry>>
@@ -20,6 +26,12 @@ interface BloodPressureRepository {
     suspend fun getAllEntriesSync(): List<BloodPressureEntry>
 }
 
+/**
+ * Concrete repository implementation backed by local SQLite via [BloodPressureDbHelper].
+ *
+ * Uses an internal [MutableSharedFlow] trigger to signal data mutations and re-emit updated
+ * lists across active [Flow] observers, ensuring IO work remains confined to [Dispatchers.IO].
+ */
 class BloodPressureRepositoryImpl(
     private val dbHelper: BloodPressureDbHelper,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO

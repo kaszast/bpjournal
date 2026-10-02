@@ -22,20 +22,37 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * Aggregation time intervals for trend charts and statistics.
+ */
 enum class PeriodMode {
     DAILY,
     WEEKLY,
     MONTHLY
 }
 
+/**
+ * Main ViewModel orchestrating the business logic, database operations,
+ * Health Connect background synchronization, and reactive UI states.
+ *
+ * Designed using Clean Architecture & MVVM principles:
+ * - Exposes UI state via immutable [StateFlow] streams.
+ * - Handles coroutine scopes tied to the lifecycle ([viewModelScope]).
+ * - Delegates low-level persistence to [BloodPressureRepository] and [UserSettingsManager].
+ */
 class BloodPressureViewModel(
     private val repository: BloodPressureRepository,
     private val healthConnectHelper: HealthConnectHelper,
     private val userSettingsManager: UserSettingsManager
 ) : ViewModel() {
 
+    /** Observable flow of user preferences. */
     val userSettings: StateFlow<UserSettings> = userSettingsManager.settings
 
+    /**
+     * Hot stream of all recorded blood pressure entries sorted by timestamp descending.
+     * Retains state in scope with a 5000ms subscription timeout to survive configuration changes.
+     */
     val entries: StateFlow<List<BloodPressureEntry>> = repository.getAllEntries()
         .stateIn(
             scope = viewModelScope,
@@ -44,6 +61,7 @@ class BloodPressureViewModel(
         )
 
     init {
+        // Pre-populate with sample clinical records on first launch if database is clean
         viewModelScope.launch {
             val existing = repository.getAllEntriesSync()
             if (existing.isEmpty()) {
@@ -52,6 +70,9 @@ class BloodPressureViewModel(
         }
     }
 
+    /**
+     * Computed summary statistics (averages, min/max, distribution counts) derived from [entries].
+     */
     val summaryStats: StateFlow<SummaryStatistics> = entries.map { list ->
         BloodPressureStatisticsCalculator.calculateSummary(list)
     }.stateIn(
@@ -63,6 +84,9 @@ class BloodPressureViewModel(
     private val _selectedPeriod = MutableStateFlow(PeriodMode.DAILY)
     val selectedPeriod: StateFlow<PeriodMode> = _selectedPeriod.asStateFlow()
 
+    /**
+     * Aggregated averages mapped dynamically based on the active [PeriodMode] filter.
+     */
     val chartData: StateFlow<List<AggregatedAverage>> = entries.map { list ->
         when (_selectedPeriod.value) {
             PeriodMode.DAILY -> BloodPressureStatisticsCalculator.calculateDailyAverages(list)
@@ -78,10 +102,14 @@ class BloodPressureViewModel(
     private val _syncStatusMessage = MutableStateFlow<String?>(null)
     val syncStatusMessage: StateFlow<String?> = _syncStatusMessage.asStateFlow()
 
+    /** Switches the aggregation window (Daily, Weekly, Monthly). */
     fun setPeriodMode(mode: PeriodMode) {
         _selectedPeriod.value = mode
     }
 
+    /**
+     * Inserts a new blood pressure entry into SQLite and optionally synchronizes with Health Connect.
+     */
     fun addEntry(entry: BloodPressureEntry) {
         viewModelScope.launch {
             val insertedId = repository.insertEntry(entry)
@@ -94,29 +122,33 @@ class BloodPressureViewModel(
         }
     }
 
+    /** Updates an existing measurement record. */
     fun updateEntry(entry: BloodPressureEntry) {
         viewModelScope.launch {
             repository.updateEntry(entry)
         }
     }
 
+    /** Deletes a measurement record by its unique database identifier. */
     fun deleteEntry(id: Long) {
         viewModelScope.launch {
             repository.deleteEntry(id)
         }
     }
 
+    /** Wipes all measurement records from the SQLite database. */
     fun deleteAllEntries() {
         viewModelScope.launch {
             repository.deleteAllEntries()
         }
     }
 
+    /** Clears transient sync feedback message. */
     fun clearSyncMessage() {
         _syncStatusMessage.value = null
     }
 
-    // Beállítások módosító függvényei
+    // --- Delegation to UserSettingsManager ---
     fun setDefaultArm(arm: Arm) = userSettingsManager.setDefaultArm(arm)
     fun setDefaultPosition(position: BodyPosition) = userSettingsManager.setDefaultPosition(position)
     fun setAutoSync(enabled: Boolean) = userSettingsManager.setAutoSync(enabled)
@@ -126,6 +158,7 @@ class BloodPressureViewModel(
     fun setThemeMode(mode: AppThemeMode) = userSettingsManager.setThemeMode(mode)
     fun setAppLanguage(language: String) = userSettingsManager.setAppLanguage(language)
 
+    // --- Health Connect Permission and Sync Operations ---
     val healthPermissions: Array<String> get() = healthConnectHelper.healthPermissions
 
     private val _hasHealthPermissions = MutableStateFlow(healthConnectHelper.hasPermissions())
@@ -137,6 +170,9 @@ class BloodPressureViewModel(
 
     fun getManagePermissionsIntent() = healthConnectHelper.getManagePermissionsIntent()
 
+    /**
+     * Batch synchronizes all local records to Google Health Connect.
+     */
     fun syncAllRecords() {
         refreshHealthPermissions()
         viewModelScope.launch {
@@ -165,6 +201,9 @@ class BloodPressureViewModel(
         }
     }
 
+    /**
+     * Populates 7 sample historical measurements covering the previous week.
+     */
     fun addSampleData() {
         viewModelScope.launch {
             val now = System.currentTimeMillis()
@@ -184,6 +223,7 @@ class BloodPressureViewModel(
         }
     }
 
+    /** Factory for injecting repository and helper dependencies into [BloodPressureViewModel]. */
     class Factory(
         private val repository: BloodPressureRepository,
         private val healthConnectHelper: HealthConnectHelper,

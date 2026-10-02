@@ -8,6 +8,9 @@ import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.model.BodyPosition
 import java.time.Instant
 
+/**
+ * Result abstraction for Health Connect record operations.
+ */
 sealed class HealthSyncResult {
     data object Success : HealthSyncResult()
     data class Error(val message: String) : HealthSyncResult()
@@ -15,6 +18,15 @@ sealed class HealthSyncResult {
     data object PermissionRequired : HealthSyncResult()
 }
 
+/**
+ * Helper class managing Android Health Connect integration.
+ *
+ * Targets Android 14+ (UPSIDE_DOWN_CAKE / API 34+) system-integrated Health Connect API:
+ * - Checks runtime support and permissions.
+ * - Constructs [android.health.connect.datatypes.BloodPressureRecord] instances.
+ * - Inserts records asynchronously into the system [android.health.connect.HealthConnectManager].
+ * - Handles errors gracefully for non-supported Android versions or denied permissions.
+ */
 class HealthConnectHelper(private val context: Context) {
 
     companion object {
@@ -27,14 +39,14 @@ class HealthConnectHelper(private val context: Context) {
     )
 
     /**
-     * Ellenőrzi, hogy az adott eszközön elérhető-e a Health Connect integráció.
+     * Checks whether Health Connect is supported and available on this device.
      */
     fun isHealthConnectAvailable(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     }
 
     /**
-     * Ellenőrzi, hogy a szükséges Health Connect jogosultságok meg vannak-e adva.
+     * Verifies that the required Health Connect read/write permissions have been granted.
      */
     fun hasPermissions(): Boolean {
         if (!isHealthConnectAvailable()) return false
