@@ -1,9 +1,16 @@
-# Feladatlista - Play Store Anyagok és Képernyőképek (v104)
+# Feladatlista - Angol Nyelvválasztás Teljes Működése (v105)
 
-- [x] 1. Verziószám frissítése 104-re (`app/build.gradle.kts`: versionCode = 104, versionName = "104")
-- [x] 2. Képernyőképek rögzítése valós eszközről magyar nyelven (Dashboard, AddDialog, History, Statistics, Export, Settings)
-- [x] 3. Képernyőképek rögzítése valós eszközről angol nyelven (Dashboard, AddDialog, History, Statistics, Export, Settings)
-- [x] 4. Letisztult, kedvcsináló Play Store leírás elkészítése magyarul és angolul (`docs/playstore/PLAYSTORE_LISTING.md`)
+- [x] 1. Verziószám frissítése 105-re (`app/build.gradle.kts`: versionCode = 105, versionName = "105")
+- [x] 2. String erőforrások kiegészítése és `values-en/strings.xml` létrehozása (`values/strings.xml`, `values-en/strings.xml`, `values-hu/strings.xml`)
+- [x] 3. `MainActivity.kt` és `LocaleHelper.kt` javítása (`LocalContext provides localizedContext`, API 33+ per-app language és recomposition/recreate kezelés)
+- [x] 4. Hardcode-olt szövegek lecserélése `stringResource(...)`-ra:
+  - `DashboardScreen.kt`
+  - `BloodPressureChart.kt`
+  - `BloodPressureCard.kt`
+  - `HistoryScreen.kt`
+  - `SettingsScreen.kt`
+  - `AddEditEntryDialog.kt`
 - [x] 5. Építés és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
-- [x] 6. Automatikus GitHub Release publikálás a v104 tag-gel és APK-val
-- [x] 7. Git commit és push a távoli repository-ba
+- [x] 6. Eszköztesztelés valós telefonon (Xiaomi 15) adb-vel: angol nyelvre váltás és képernyőkép-ellenőrzés
+- [ ] 7. GitHub release publikálás a v105 tag-gel és APK-val (`scripts/publish_release.py`)
+- [ ] 8. Git commit és push a távoli repository-ba

@@ -83,7 +83,8 @@ class MainActivity : ComponentActivity() {
                 AppThemeMode.DARK -> true
             }
             CompositionLocalProvider(
-                LocalConfiguration provides localizedContext.resources.configuration
+                LocalConfiguration provides localizedContext.resources.configuration,
+                LocalContext provides localizedContext
             ) {
                 BPJournalTheme(darkTheme = isDark) {
                     MainAppScreen(viewModel = viewModel)

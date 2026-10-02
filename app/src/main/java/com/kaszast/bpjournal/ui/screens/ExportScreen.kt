@@ -255,13 +255,13 @@ fun ExportScreen(
                             )
                             shareFile(context, csvFile, "text/csv", "BPJournal CSV Export")
                         } else {
-                            Toast.makeText(context, "Nincs exportálható mérés az időszakban", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.no_export_entries_toast), Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = filteredEntries.isNotEmpty()
                 ) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Megosztás", modifier = Modifier.size(18.dp))
+                    Icon(imageVector = Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(stringResource(R.string.export_csv_button), fontSize = 13.sp)
                 }

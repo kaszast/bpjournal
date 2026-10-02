@@ -136,7 +136,7 @@ fun DashboardScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "LEGUTÓBBI MÉRÉS",
+                                text = stringResource(R.string.latest_reading_caps),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 1.sp,
@@ -182,13 +182,13 @@ fun DashboardScreen(
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Row {
                                     Text(
-                                        text = "Szisztolés",
+                                        text = stringResource(R.string.systolic_label),
                                         fontSize = 11.sp,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Spacer(modifier = Modifier.width(18.dp))
                                     Text(
-                                        text = "Diasztolés",
+                                        text = stringResource(R.string.diastolic_label),
                                         fontSize = 11.sp,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -196,7 +196,7 @@ fun DashboardScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        text = "Hgmm",
+                                        text = stringResource(R.string.unit_mmhg),
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -227,7 +227,7 @@ fun DashboardScreen(
                             .padding(20.dp)
                     ) {
                         Text(
-                            text = "ÜDVÖZÖLJÜK A BPJOURNAL-BAN",
+                            text = stringResource(R.string.welcome_title),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 1.sp,
@@ -235,14 +235,14 @@ fun DashboardScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Modern vérnyomásnapló és trendek",
+                            text = stringResource(R.string.welcome_subtitle),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "A prémium orvosi kártyák, a pulzusgyűrű és a célzónás trendgrafikon megtekintéséhez töltsön be mintaadatokat, vagy rögzítsen új mérést.",
+                            text = stringResource(R.string.welcome_desc),
                             fontSize = 13.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -260,14 +260,14 @@ fun DashboardScreen(
                                     contentColor = MaterialTheme.colorScheme.onPrimary
                                 )
                             ) {
-                                Text("Mintaadatok betöltése", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text(stringResource(R.string.load_sample_data), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
                             OutlinedButton(
                                 onClick = onAddNewEntry,
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
-                                Text("Új mérés (+)", fontSize = 11.sp)
+                                Text(stringResource(R.string.new_reading_button), fontSize = 11.sp)
                             }
                         }
                     }
@@ -314,14 +314,14 @@ private fun RecentReadingsCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Legutóbbi mérések",
+                    text = stringResource(R.string.recent_readings_title),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 TextButton(onClick = onViewAllClick) {
                     Text(
-                        text = "Összes (${entries.size})",
+                        text = stringResource(R.string.view_all_format, entries.size),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = AccentTeal
@@ -333,7 +333,7 @@ private fun RecentReadingsCard(
 
             if (entries.isEmpty()) {
                 Text(
-                    text = "Nincs még rögzített mérés.",
+                    text = stringResource(R.string.no_measurements),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 12.dp)

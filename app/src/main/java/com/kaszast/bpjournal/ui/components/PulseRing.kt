@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.kaszast.bpjournal.R
 import com.kaszast.bpjournal.ui.theme.AccentMint
 
 @Composable
@@ -82,8 +84,13 @@ fun PulseRing(
         }
 
         Spacer(modifier = Modifier.height(2.dp))
+        val statusText = when {
+            pulse in 60..100 -> stringResource(R.string.pulse_normal)
+            pulse < 60 -> stringResource(R.string.pulse_low)
+            else -> stringResource(R.string.pulse_high)
+        }
         Text(
-            text = if (pulse in 60..100) "Normál pulzus" else if (pulse < 60) "Alacsony" else "Magas",
+            text = statusText,
             fontSize = 10.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

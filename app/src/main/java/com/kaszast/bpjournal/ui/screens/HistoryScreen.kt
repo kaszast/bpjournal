@@ -97,7 +97,7 @@ fun HistoryScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${filteredEntries.size} mérés",
+                    text = stringResource(R.string.count_format, filteredEntries.size),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -109,14 +109,14 @@ fun HistoryScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                placeholder = { Text("Keresés...", fontSize = 13.sp) },
+                placeholder = { Text(stringResource(R.string.search_placeholder), fontSize = 13.sp) },
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "Keresés", modifier = Modifier.size(18.dp))
+                    Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.search_placeholder), modifier = Modifier.size(18.dp))
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
                         IconButton(onClick = { searchQuery = "" }) {
-                            Icon(imageVector = Icons.Default.Clear, contentDescription = "Törlés", modifier = Modifier.size(18.dp))
+                            Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(R.string.delete), modifier = Modifier.size(18.dp))
                         }
                     }
                 },
@@ -139,7 +139,7 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = if (searchQuery.isBlank()) stringResource(R.string.no_measurements) else "Nincs találat a keresésre.",
+                    text = if (searchQuery.isBlank()) stringResource(R.string.no_measurements) else stringResource(R.string.search_no_results),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 13.sp
                 )
@@ -177,18 +177,19 @@ fun HistoryScreen(
     }
 
     entryToDelete?.let { entry ->
+        val details = "${entry.formattedDateTime()} • ST ${entry.systolic} / DST ${entry.diastolic} ${stringResource(R.string.unit_mmhg)} (${stringResource(R.string.pulse_short)}: ${entry.pulse} ${stringResource(R.string.unit_bpm)})"
         AlertDialog(
             onDismissRequest = { entryToDelete = null },
             title = {
                 Text(
-                    text = "Mérés törlése",
+                    text = stringResource(R.string.delete_confirm_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
             },
             text = {
                 Text(
-                    text = "Biztosan törölni szeretné ezt a mérést?\n\n${entry.formattedDateTime()} • ST ${entry.systolic} / DST ${entry.diastolic} Hgmm (Pulzus: ${entry.pulse} BPM)",
+                    text = stringResource(R.string.delete_confirm_desc, details),
                     fontSize = 14.sp
                 )
             },

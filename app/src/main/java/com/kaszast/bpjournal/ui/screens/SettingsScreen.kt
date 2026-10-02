@@ -97,10 +97,10 @@ fun SettingsScreen(
         viewModel.refreshHealthPermissions()
         val granted = results.values.any { it }
         if (granted) {
-            Toast.makeText(context, "Health Connect hozzáférés engedélyezve!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.toast_health_granted), Toast.LENGTH_SHORT).show()
             viewModel.syncAllRecords()
         } else {
-            Toast.makeText(context, "Health Connect engedély elutasítva.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.toast_health_denied), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -308,7 +308,7 @@ fun SettingsScreen(
                     ) {
                         Icon(imageVector = Icons.Default.Security, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Health Connect engedély megadása", fontSize = 12.sp)
+                        Text(stringResource(R.string.grant_health_permissions), fontSize = 12.sp)
                     }
 
                     Spacer(modifier = Modifier.height(6.dp))
@@ -317,14 +317,14 @@ fun SettingsScreen(
                             try {
                                 context.startActivity(viewModel.getManagePermissionsIntent())
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Nem sikerült megnyitni a beállításokat", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.toast_settings_failed), Toast.LENGTH_SHORT).show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Health Connect beállítások megnyitása", fontSize = 11.sp)
+                        Text(stringResource(R.string.open_health_settings), fontSize = 11.sp)
                     }
                 }
 
@@ -344,7 +344,7 @@ fun SettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if (userSettings.autoSyncHealthConnect) stringResource(R.string.settings_auto_sync_desc) else "Csak helyi mentés",
+                            text = if (userSettings.autoSyncHealthConnect) stringResource(R.string.settings_auto_sync_desc) else stringResource(R.string.local_storage_only),
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -640,7 +640,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "ESH / ESC Határértékek (Hgmm)",
+                        text = stringResource(R.string.esh_reference_title, stringResource(R.string.unit_mmhg)),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -654,19 +654,19 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Kategória", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.5f))
-                    Text("Szisztolés", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
-                    Text("Diasztolés", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
+                    Text(stringResource(R.string.esh_header_category), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.5f))
+                    Text(stringResource(R.string.systolic_label), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
+                    Text(stringResource(R.string.diastolic_label), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                ReferenceRow("Optimális", "< 120", "< 80", CategoryOptimal)
-                ReferenceRow("Normál", "120 - 129", "80 - 84", CategoryNormal)
-                ReferenceRow("Emelkedett", "130 - 139", "85 - 89", CategoryHighNormal)
-                ReferenceRow("I. fokozat", "140 - 159", "90 - 99", CategoryGrade1)
-                ReferenceRow("II. fokozat", "160 - 179", "100 - 109", CategoryGrade2)
-                ReferenceRow("III. fokozat", "≥ 180", "≥ 110", CategoryGrade3)
+                ReferenceRow(stringResource(R.string.category_optimal), "< 120", "< 80", CategoryOptimal)
+                ReferenceRow(stringResource(R.string.category_normal), "120 - 129", "80 - 84", CategoryNormal)
+                ReferenceRow(stringResource(R.string.category_high_normal), "130 - 139", "85 - 89", CategoryHighNormal)
+                ReferenceRow(stringResource(R.string.category_grade_1_short), "140 - 159", "90 - 99", CategoryGrade1)
+                ReferenceRow(stringResource(R.string.category_grade_2_short), "160 - 179", "100 - 109", CategoryGrade2)
+                ReferenceRow(stringResource(R.string.category_grade_3_short), "≥ 180", "≥ 110", CategoryGrade3)
             }
         }
     }

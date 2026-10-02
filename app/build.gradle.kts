@@ -11,8 +11,8 @@ android {
     applicationId = "com.kaszast.bpjournal"
     minSdk = 26
     targetSdk = 36
-    versionCode = 104
-    versionName = "104"
+    versionCode = 105
+    versionName = "105"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -20,6 +20,7 @@ android {
   buildTypes {
     release {
       isMinifyEnabled = false
+      signingConfig = signingConfigs.getByName("debug")
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
     debug {

@@ -56,14 +56,25 @@ object LocaleHelper {
 
         // API 33+ Per-App Language Preferences integration
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val localeManager = context.getSystemService(LocaleManager::class.java)
-            val appLocales = if (language == "system") LocaleList.getEmptyLocaleList() else LocaleList(targetLocale)
-            localeManager?.applicationLocales = appLocales
+            runCatching {
+                val localeManager = context.getSystemService(LocaleManager::class.java)
+                val appLocales = if (language == "system") LocaleList.getEmptyLocaleList() else LocaleList(targetLocale)
+                if (localeManager?.applicationLocales != appLocales) {
+                    localeManager?.applicationLocales = appLocales
+                }
+            }
         }
 
         val config = Configuration(context.resources.configuration)
-        config.setLocale(targetLocale)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.setLocales(LocaleList(targetLocale))
+        } else {
+            config.setLocale(targetLocale)
+        }
         config.setLayoutDirection(targetLocale)
+
+        @Suppress("DEPRECATION")
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
         return context.createConfigurationContext(config)
     }

@@ -180,7 +180,7 @@ fun AddEditEntryDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CalendarMonth,
-                                contentDescription = "Időpont módosítása",
+                                contentDescription = stringResource(R.string.change_time),
                                 modifier = Modifier.size(14.dp),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -201,7 +201,7 @@ fun AddEditEntryDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Update,
-                                contentDescription = "Most",
+                                contentDescription = stringResource(R.string.now),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -220,8 +220,8 @@ fun AddEditEntryDialog(
                         range = 70..230,
                         value = systolicValue,
                         onValueChange = { systolicValue = it },
-                        label = "ST",
-                        unit = "Hgmm",
+                        label = stringResource(R.string.label_st),
+                        unit = stringResource(R.string.unit_mmhg),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -229,8 +229,8 @@ fun AddEditEntryDialog(
                         range = 40..150,
                         value = diastolicValue,
                         onValueChange = { diastolicValue = it },
-                        label = "DST",
-                        unit = "Hgmm",
+                        label = stringResource(R.string.label_dst),
+                        unit = stringResource(R.string.unit_mmhg),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -238,8 +238,8 @@ fun AddEditEntryDialog(
                         range = 40..180,
                         value = pulseValue,
                         onValueChange = { pulseValue = it },
-                        label = "Pulzus",
-                        unit = "BPM",
+                        label = stringResource(R.string.pulse_short),
+                        unit = stringResource(R.string.unit_bpm),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -264,14 +264,14 @@ fun AddEditEntryDialog(
                             onClick = { selectedArm = Arm.LEFT },
                             shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
                         ) {
-                            Text("Bal", fontSize = 11.sp)
+                            Text(stringResource(R.string.arm_left_short), fontSize = 11.sp)
                         }
                         SegmentedButton(
                             selected = selectedArm == Arm.RIGHT,
                             onClick = { selectedArm = Arm.RIGHT },
                             shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
                         ) {
-                            Text("Jobb", fontSize = 11.sp)
+                            Text(stringResource(R.string.arm_right_short), fontSize = 11.sp)
                         }
                     }
                 }
@@ -290,27 +290,27 @@ fun AddEditEntryDialog(
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    SingleChoiceSegmentedButtonRow(modifier = Modifier.width(220.dp)) {
+                    SingleChoiceSegmentedButtonRow(modifier = Modifier.width(245.dp)) {
                         SegmentedButton(
                             selected = selectedPosition == BodyPosition.SITTING,
                             onClick = { selectedPosition = BodyPosition.SITTING },
                             shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
                         ) {
-                            Text("Ülő", fontSize = 11.sp)
+                            Text(stringResource(R.string.position_sitting), fontSize = 11.sp)
                         }
                         SegmentedButton(
                             selected = selectedPosition == BodyPosition.LYING,
                             onClick = { selectedPosition = BodyPosition.LYING },
                             shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
                         ) {
-                            Text("Fekvő", fontSize = 11.sp)
+                            Text(stringResource(R.string.position_lying), fontSize = 11.sp)
                         }
                         SegmentedButton(
                             selected = selectedPosition == BodyPosition.STANDING,
                             onClick = { selectedPosition = BodyPosition.STANDING },
                             shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
                         ) {
-                            Text("Álló", fontSize = 11.sp)
+                            Text(stringResource(R.string.position_standing), fontSize = 11.sp)
                         }
                     }
                 }
@@ -351,7 +351,7 @@ fun AddEditEntryDialog(
                 OutlinedTextField(
                     value = notesText,
                     onValueChange = { notesText = it },
-                    placeholder = { Text("Megjegyzés (opcionális)", fontSize = 12.sp) },
+                    placeholder = { Text(stringResource(R.string.notes_optional), fontSize = 12.sp) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )

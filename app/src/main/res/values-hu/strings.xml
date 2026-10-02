@@ -6,18 +6,34 @@
     <string name="nav_export">Exportálás</string>
     <string name="nav_settings">Beállítások</string>
 
+    <string name="unit_mmhg">Hgmm</string>
+    <string name="unit_bpm">BPM</string>
+    <string name="label_st">ST</string>
+    <string name="label_dst">DST</string>
+
     <string name="record_new">Új mérés rögzítése</string>
     <string name="systolic">Szisztolés (Hgmm)</string>
     <string name="diastolic">Diasztolés (Hgmm)</string>
+    <string name="systolic_label">Szisztolés</string>
+    <string name="diastolic_label">Diasztolés</string>
     <string name="pulse">Pulzus (BPM)</string>
+    <string name="pulse_short">Pulzus</string>
+    <string name="pulse_normal">Normál pulzus</string>
+    <string name="pulse_low">Alacsony pulzus</string>
+    <string name="pulse_high">Magas pulzus</string>
     <string name="date_and_time">Dátum és idő</string>
     <string name="arm">Kar</string>
     <string name="arm_left">Bal kar</string>
     <string name="arm_right">Jobb kar</string>
+    <string name="arm_left_short">Bal</string>
+    <string name="arm_right_short">Jobb</string>
     <string name="body_position">Testhelyzet</string>
     <string name="position_sitting">Ülő</string>
     <string name="position_lying">Fekvő</string>
     <string name="position_standing">Álló</string>
+    <string name="pos_sitting_lower">ülő</string>
+    <string name="pos_lying_lower">fekvő</string>
+    <string name="pos_standing_lower">álló</string>
     <string name="tags">Címkék / Körülmények</string>
     <string name="tag_resting">Nyugalmi</string>
     <string name="tag_post_medication">Gyógyszer után</string>
@@ -25,10 +41,13 @@
     <string name="tag_caffeine">Koffein</string>
     <string name="tag_exercise">Testmozgás</string>
     <string name="notes">Megjegyzés</string>
+    <string name="notes_optional">Megjegyzés (opcionális)</string>
     <string name="save">Mentés</string>
     <string name="cancel">Mégse</string>
     <string name="delete">Törlés</string>
     <string name="edit">Szerkesztés</string>
+    <string name="change_time">Időpont módosítása</string>
+    <string name="now">Most</string>
 
     <string name="category_optimal">Optimális</string>
     <string name="category_normal">Normál</string>
@@ -41,11 +60,30 @@
     <string name="pulse_pressure">Pulzusnyomás (PP)</string>
     <string name="mean_arterial_pressure">Középnyomás (MAP)</string>
     <string name="latest_measurement">Legutóbbi mérés</string>
+    <string name="latest_reading_caps">LEGUTÓBBI MÉRÉS</string>
     <string name="today_average">Mai átlag</string>
     <string name="week_average">7 napos átlag</string>
     <string name="month_average">30 napos átlag</string>
     <string name="no_measurements">Még nem rögzített mérést.</string>
     <string name="count_format">%d mérés</string>
+
+    <string name="welcome_title">ÜDVÖZÖLJÜK A BPJOURNAL-BAN</string>
+    <string name="welcome_subtitle">Modern vérnyomásnapló és trendek</string>
+    <string name="welcome_desc">A prémium orvosi kártyák, a pulzusgyűrű és a célzónás trendgrafikon megtekintéséhez töltsön be mintaadatokat, vagy rögzítsen új mérést.</string>
+    <string name="load_sample_data">Mintaadatok betöltése</string>
+    <string name="new_reading_button">Új mérés (+)</string>
+    <string name="recent_readings_title">Legutóbbi mérések</string>
+    <string name="view_all_format">Összes (%d)</string>
+
+    <string name="chart_title">Vérnyomás trendek</string>
+    <string name="chart_past_7_days">Elmúlt 7 nap</string>
+    <string name="chart_no_data">Nincs elegendő adat a grafikonhoz</string>
+    <string name="chart_target_zone">Célsáv: 80-120 %s</string>
+
+    <string name="search_placeholder">Keresés...</string>
+    <string name="search_no_results">Nincs találat a keresésre.</string>
+    <string name="delete_confirm_title">Mérés törlése</string>
+    <string name="delete_confirm_desc">Biztosan törölni szeretné ezt a mérést?\n\n%s</string>
 
     <string name="export_title">Adatok exportálása</string>
     <string name="export_pdf_button">Orvosi PDF lelet készítése</string>
@@ -60,6 +98,12 @@
     <string name="health_connect_sync_now">Szinkronizálás most</string>
     <string name="health_connect_connected">Összekapcsolva</string>
     <string name="health_connect_disconnected">Nincs engedélyezve</string>
+    <string name="grant_health_permissions">Health Connect engedély megadása</string>
+    <string name="open_health_settings">Health Connect beállítások megnyitása</string>
+    <string name="local_storage_only">Csak helyi mentés</string>
+    <string name="toast_health_granted">Health Connect hozzáférés engedélyezve!</string>
+    <string name="toast_health_denied">Health Connect engedély elutasítva.</string>
+    <string name="toast_settings_failed">Nem sikerült megnyitni a beállításokat</string>
 
     <string name="reminders_title">Mérési Emlékeztetők</string>
     <string name="reminder_morning">Reggeli mérés</string>
@@ -108,4 +152,7 @@
     <string name="settings_auto_sync">Automatikus szinkronizálás</string>
     <string name="settings_auto_sync_desc">Új mérések automatikus beküldése</string>
     <string name="settings_sync_all_button">Összes korábbi mérés szinkronizálása</string>
+
+    <string name="esh_reference_title">ESH / ESC Határértékek (%s)</string>
+    <string name="esh_header_category">Kategória</string>
 </resources>

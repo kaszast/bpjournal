@@ -96,12 +96,14 @@ fun BloodPressureCard(
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
+                        val armStr = if (entry.arm == Arm.LEFT) stringResource(R.string.arm_left) else stringResource(R.string.arm_right)
+                        val posStr = when (entry.position) {
+                            BodyPosition.SITTING -> stringResource(R.string.pos_sitting_lower)
+                            BodyPosition.LYING -> stringResource(R.string.pos_lying_lower)
+                            BodyPosition.STANDING -> stringResource(R.string.pos_standing_lower)
+                        }
                         Text(
-                            text = "${if (entry.arm == Arm.LEFT) "Bal kar" else "Jobb kar"} (${when (entry.position) {
-                                BodyPosition.SITTING -> "ülő"
-                                BodyPosition.LYING -> "fekvő"
-                                BodyPosition.STANDING -> "álló"
-                            }})",
+                            text = "$armStr ($posStr)",
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
@@ -178,7 +180,7 @@ fun BloodPressureCard(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Hgmm",
+                        text = stringResource(R.string.unit_mmhg),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -190,7 +192,7 @@ fun BloodPressureCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
-                        contentDescription = "Pulzus",
+                        contentDescription = stringResource(R.string.pulse_short),
                         tint = pulseColor,
                         modifier = Modifier.size(15.dp)
                     )
@@ -203,7 +205,7 @@ fun BloodPressureCard(
                     )
                     Spacer(modifier = Modifier.width(3.dp))
                     Text(
-                        text = "BPM",
+                        text = stringResource(R.string.unit_bpm),
                         fontSize = 10.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

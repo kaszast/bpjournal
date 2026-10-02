@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.kaszast.bpjournal.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -64,13 +66,13 @@ fun BloodPressureChart(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Vérnyomás trendek",
+                    text = stringResource(R.string.chart_title),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Elmúlt 7 nap",
+                    text = stringResource(R.string.chart_past_7_days),
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -85,9 +87,9 @@ fun BloodPressureChart(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ChartLegend(color = sysColor, label = "Szisztolés")
+                ChartLegend(color = sysColor, label = stringResource(R.string.systolic_label))
                 Spacer(modifier = Modifier.width(18.dp))
-                ChartLegend(color = diaColor, label = "Diasztolés")
+                ChartLegend(color = diaColor, label = stringResource(R.string.diastolic_label))
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -100,7 +102,7 @@ fun BloodPressureChart(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Nincs elegendő adat a grafikonhoz",
+                        text = stringResource(R.string.chart_no_data),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     )
@@ -216,7 +218,7 @@ fun BloodPressureChart(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "Célsáv: 80-120 Hgmm",
+                    text = stringResource(R.string.chart_target_zone, stringResource(R.string.unit_mmhg)),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = if (isDark) DarkDiastolic else LightDiastolic
