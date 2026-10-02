@@ -1,16 +1,9 @@
-# Feladatlista - Beállítások, Déli emlékeztető és Nyelvválasztás (v102)
+# Feladatlista - Play Store Anyagok és Képernyőképek (v104)
 
-- [x] 1. Verziószám frissítése 102-re az `app/build.gradle.kts`-ben (`versionCode = 102`, `versionName = "102"`)
-- [x] 2. `UserSettingsManager.kt` bővítése:
-  - Déli emlékeztető (`reminderNoonEnabled`, `reminderNoonTime`)
-  - Nyelv beállítás (`appLanguage`: system / hu / en)
-- [x] 3. Nyelvváltás infrastruktúra kialakítása (Android Locale és per-app language támogatás, LocaleHelper)
-- [x] 4. Szöveges erőforrások frissítése (`strings.xml`, `values-hu/strings.xml`)
-- [x] 5. `SettingsScreen.kt` átdolgozása:
-  - Déli emlékeztető kártya beépítése
-  - Nyelvválasztó dialógus/menü beépítése
-  - Adatkezelés és tesztelés (tesztadat generálás, összes adat törlése) teljes eltávolítása
-- [x] 6. Fordítás és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
-- [x] 7. Telepítés Xiaomi 15 eszközre, ellenőrzés képernyőképekkel (magyar és angol nézet)
-- [x] 8. Automatikus GitHub Release publikálás a v102 tag-gel és APK-val
-- [x] 9. Git commit és push a távoli repository-ba
+- [x] 1. Verziószám frissítése 104-re (`app/build.gradle.kts`: versionCode = 104, versionName = "104")
+- [x] 2. Képernyőképek rögzítése valós eszközről magyar nyelven (Dashboard, AddDialog, History, Statistics, Export, Settings)
+- [x] 3. Képernyőképek rögzítése valós eszközről angol nyelven (Dashboard, AddDialog, History, Statistics, Export, Settings)
+- [x] 4. Letisztult, kedvcsináló Play Store leírás elkészítése magyarul és angolul (`docs/playstore/PLAYSTORE_LISTING.md`)
+- [x] 5. Építés és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
+- [x] 6. Automatikus GitHub Release publikálás a v104 tag-gel és APK-val
+- [x] 7. Git commit és push a távoli repository-ba

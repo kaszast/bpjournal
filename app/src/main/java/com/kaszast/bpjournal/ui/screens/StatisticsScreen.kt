@@ -27,6 +27,8 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.kaszast.bpjournal.R
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -65,13 +67,13 @@ fun StatisticsScreen(
         item {
             Column {
                 Text(
-                    text = "Grafikonok és Átlagok",
+                    text = stringResource(R.string.stats_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = SlatePrimary
                 )
                 Text(
-                    text = "Napi, heti és havi keringési dinamika",
+                    text = stringResource(R.string.stats_subtitle),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -86,21 +88,21 @@ fun StatisticsScreen(
                     onClick = { viewModel.setPeriodMode(PeriodMode.DAILY) },
                     shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
                 ) {
-                    Text("Napi", fontSize = 13.sp)
+                    Text(stringResource(R.string.period_daily), fontSize = 13.sp)
                 }
                 SegmentedButton(
                     selected = selectedPeriod == PeriodMode.WEEKLY,
                     onClick = { viewModel.setPeriodMode(PeriodMode.WEEKLY) },
                     shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
                 ) {
-                    Text("Heti", fontSize = 13.sp)
+                    Text(stringResource(R.string.period_weekly), fontSize = 13.sp)
                 }
                 SegmentedButton(
                     selected = selectedPeriod == PeriodMode.MONTHLY,
                     onClick = { viewModel.setPeriodMode(PeriodMode.MONTHLY) },
                     shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
                 ) {
-                    Text("Havi", fontSize = 13.sp)
+                    Text(stringResource(R.string.period_monthly), fontSize = 13.sp)
                 }
             }
         }
@@ -123,7 +125,7 @@ fun StatisticsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "Orvosi Kategória Megoszlás (ESH)",
+                        text = stringResource(R.string.category_distribution_title),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -132,13 +134,13 @@ fun StatisticsScreen(
 
                     if (stats.totalCount == 0) {
                         Text(
-                            text = "Nincs rögzített adat",
+                            text = stringResource(R.string.no_data_recorded),
                             fontSize = 13.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     } else {
                         CategoryBar(
-                            name = "Optimális",
+                            name = stringResource(R.string.category_optimal),
                             range = "<120/80",
                             color = CategoryOptimal,
                             count = stats.categoryDistribution[BloodPressureCategory.OPTIMAL] ?: 0,
@@ -146,7 +148,7 @@ fun StatisticsScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CategoryBar(
-                            name = "Normál",
+                            name = stringResource(R.string.category_normal),
                             range = "120-129 / 80-84",
                             color = CategoryNormal,
                             count = stats.categoryDistribution[BloodPressureCategory.NORMAL] ?: 0,
@@ -154,7 +156,7 @@ fun StatisticsScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CategoryBar(
-                            name = "Emelkedett",
+                            name = stringResource(R.string.category_high_normal),
                             range = "130-139 / 85-89",
                             color = CategoryHighNormal,
                             count = stats.categoryDistribution[BloodPressureCategory.HIGH_NORMAL] ?: 0,
@@ -162,7 +164,7 @@ fun StatisticsScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CategoryBar(
-                            name = "I. fokozat",
+                            name = stringResource(R.string.category_grade_1_short),
                             range = "140-159 / 90-99",
                             color = CategoryGrade1,
                             count = stats.categoryDistribution[BloodPressureCategory.GRADE_1_HYPERTENSION] ?: 0,
@@ -170,7 +172,7 @@ fun StatisticsScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CategoryBar(
-                            name = "II. fokozat",
+                            name = stringResource(R.string.category_grade_2_short),
                             range = "160-179 / 100-109",
                             color = CategoryGrade2,
                             count = stats.categoryDistribution[BloodPressureCategory.GRADE_2_HYPERTENSION] ?: 0,
@@ -178,7 +180,7 @@ fun StatisticsScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CategoryBar(
-                            name = "III. fokozat",
+                            name = stringResource(R.string.category_grade_3_short),
                             range = "≥180 / ≥110",
                             color = CategoryGrade3,
                             count = stats.categoryDistribution[BloodPressureCategory.GRADE_3_HYPERTENSION] ?: 0,
@@ -193,7 +195,7 @@ fun StatisticsScreen(
         item {
             Column {
                 Text(
-                    text = "Időszaki Részletezés",
+                    text = stringResource(R.string.period_breakdown_title),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -201,7 +203,7 @@ fun StatisticsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 if (chartData.isEmpty()) {
                     Text(
-                        text = "Nincs rögzített adat",
+                        text = stringResource(R.string.no_data_recorded),
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -233,7 +235,7 @@ fun StatisticsScreen(
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
                                         Text(
-                                            text = "${item.count} mérés alapján",
+                                            text = stringResource(R.string.based_on_count, item.count),
                                             fontSize = 11.sp,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -247,7 +249,7 @@ fun StatisticsScreen(
                                             softWrap = false
                                         )
                                         Text(
-                                            text = "Pulzus: ${item.averagePulse.toInt()} BPM",
+                                            text = stringResource(R.string.pulse_format, item.averagePulse.toInt()),
                                             fontSize = 11.sp,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -309,7 +311,7 @@ private fun CategoryBar(
                 )
             }
             Text(
-                text = "$count db ($percent%)",
+                text = "${stringResource(R.string.count_format, count)} ($percent%)",
                 fontSize = 11.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

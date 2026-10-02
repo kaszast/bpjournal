@@ -94,7 +94,7 @@ fun ExportScreen(
                 color = SlatePrimary
             )
             Text(
-                text = "Orvosi lelet készítése és táblázatos adatmentés",
+                text = stringResource(R.string.export_subtitle),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -112,7 +112,7 @@ fun ExportScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Exportálandó időszak",
+                    text = stringResource(R.string.export_period_title),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -124,26 +124,26 @@ fun ExportScreen(
                         onClick = { selectedRange = ExportRange.ALL },
                         shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
                     ) {
-                        Text("Összes", fontSize = 12.sp)
+                        Text(stringResource(R.string.export_range_all_short), fontSize = 12.sp)
                     }
                     SegmentedButton(
                         selected = selectedRange == ExportRange.DAYS_30,
                         onClick = { selectedRange = ExportRange.DAYS_30 },
                         shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
                     ) {
-                        Text("30 nap", fontSize = 12.sp)
+                        Text(stringResource(R.string.export_range_30d_short), fontSize = 12.sp)
                     }
                     SegmentedButton(
                         selected = selectedRange == ExportRange.DAYS_90,
                         onClick = { selectedRange = ExportRange.DAYS_90 },
                         shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
                     ) {
-                        Text("90 nap", fontSize = 12.sp)
+                        Text(stringResource(R.string.export_range_90d_short), fontSize = 12.sp)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Kiválasztott mérések száma: ${filteredEntries.size} db",
+                    text = stringResource(R.string.export_selected_count, filteredEntries.size),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -171,13 +171,13 @@ fun ExportScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
-                            text = "Orvosi PDF Jelentés",
+                            text = stringResource(R.string.export_pdf_card_title),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = SlatePrimary
                         )
                         Text(
-                            text = "A4 formátumú nyomtatható orvosi lelet statisztikával és naplóval",
+                            text = stringResource(R.string.export_pdf_card_desc),
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -196,7 +196,7 @@ fun ExportScreen(
                             )
                             shareFile(context, pdfFile, "application/pdf", "BPJournal Orvosi Lelet")
                         } else {
-                            Toast.makeText(context, "Nincs exportálható mérés az időszakban", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.no_export_entries_toast), Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -231,13 +231,13 @@ fun ExportScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         Text(
-                            text = "CSV Táblázat",
+                            text = stringResource(R.string.export_csv_card_title),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = SlatePrimary
                         )
                         Text(
-                            text = "Szabványos vesszővel tagolt fájl Excel és egyéb programokhoz",
+                            text = stringResource(R.string.export_csv_card_desc),
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

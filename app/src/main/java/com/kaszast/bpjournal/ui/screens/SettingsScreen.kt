@@ -274,7 +274,7 @@ fun SettingsScreen(
                         ) {
                             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF10B981), modifier = Modifier.size(13.dp))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Aktív", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF047857))
+                            Text(stringResource(R.string.status_active), fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF047857))
                         }
                     } else {
                         Row(
@@ -285,14 +285,14 @@ fun SettingsScreen(
                         ) {
                             Icon(imageVector = Icons.Default.Warning, contentDescription = null, tint = Color(0xFFD97706), modifier = Modifier.size(13.dp))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Engedély kell", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFB45309))
+                            Text(stringResource(R.string.status_permission_needed), fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFB45309))
                         }
                     }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Azonnali szinkronizáció a rendszer Health Connect és Google Fit felületére.",
+                    text = stringResource(R.string.health_connect_desc),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -338,13 +338,13 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Automatikus szinkronizálás",
+                            text = stringResource(R.string.settings_auto_sync),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if (userSettings.autoSyncHealthConnect) "Új mérések automatikus beküldése" else "Csak helyi mentés",
+                            text = if (userSettings.autoSyncHealthConnect) stringResource(R.string.settings_auto_sync_desc) else "Csak helyi mentés",
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -370,7 +370,7 @@ fun SettingsScreen(
                 ) {
                     Icon(imageVector = Icons.Default.Sync, contentDescription = "Szinkronizálás", modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = "Összes korábbi mérés szinkronizálása", fontSize = 12.sp)
+                    Text(text = stringResource(R.string.settings_sync_all_button), fontSize = 12.sp)
                 }
 
                 if (syncStatus != null) {
