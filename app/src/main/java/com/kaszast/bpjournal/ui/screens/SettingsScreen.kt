@@ -1,6 +1,9 @@
 package com.kaszast.bpjournal.ui.screens
 
 import android.app.TimePickerDialog
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,13 +22,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -70,6 +77,20 @@ fun SettingsScreen(
     val context = LocalContext.current
     val userSettings by viewModel.userSettings.collectAsState()
     val syncStatus by viewModel.syncStatusMessage.collectAsState()
+    val hasHealthPermissions by viewModel.hasHealthPermissions.collectAsState()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        viewModel.refreshHealthPermissions()
+        val granted = results.values.any { it }
+        if (granted) {
+            Toast.makeText(context, "Health Connect hozzáférés engedélyezve!", Toast.LENGTH_SHORT).show()
+            viewModel.syncAllRecords()
+        } else {
+            Toast.makeText(context, "Health Connect engedély elutasítva.", Toast.LENGTH_LONG).show()
+        }
+    }
 
     fun showTimePicker(currentTime: String, onTimePicked: (String) -> Unit) {
         val parts = currentTime.split(":")
@@ -208,28 +229,92 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Sync,
-                        contentDescription = "Sync",
-                        tint = TealSecondary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(R.string.health_connect_title),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = SlatePrimary
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f, fill = false),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Sync,
+                            contentDescription = "Sync",
+                            tint = TealSecondary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Health Connect",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = SlatePrimary
+                        )
+                    }
+
+                    if (hasHealthPermissions) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(Color(0xFF10B981).copy(alpha = 0.12f), RoundedCornerShape(12.dp))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF10B981), modifier = Modifier.size(13.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Aktív", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF047857))
+                        }
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(Color(0xFFF59E0B).copy(alpha = 0.12f), RoundedCornerShape(12.dp))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Icon(imageVector = Icons.Default.Warning, contentDescription = null, tint = Color(0xFFD97706), modifier = Modifier.size(13.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Engedély kell", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFB45309))
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Azonnali szinkronizáció a Health Connect / Google Fit tárolóba minden mentéskor.",
+                    text = "Azonnali szinkronizáció a rendszer Health Connect és Google Fit felületére.",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (!hasHealthPermissions) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Button(
+                        onClick = {
+                            permissionLauncher.launch(viewModel.healthPermissions)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = SlatePrimary)
+                    ) {
+                        Icon(imageVector = Icons.Default.Security, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Health Connect engedély megadása", fontSize = 12.sp)
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                    OutlinedButton(
+                        onClick = {
+                            try {
+                                context.startActivity(viewModel.getManagePermissionsIntent())
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Nem sikerült megnyitni a beállításokat", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null, modifier = Modifier.size(14.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Health Connect beállítások megnyitása", fontSize = 11.sp)
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -247,7 +332,7 @@ fun SettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if (userSettings.autoSyncHealthConnect) "Aktív: mentéskor azonnal küldés" else "Kikapcsolva: csak helyi mentés",
+                            text = if (userSettings.autoSyncHealthConnect) "Új mérések automatikus beküldése" else "Csak helyi mentés",
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -262,12 +347,18 @@ fun SettingsScreen(
 
                 // Összes adat szinkronizálása gomb
                 OutlinedButton(
-                    onClick = { viewModel.syncAllRecords() },
+                    onClick = {
+                        if (!hasHealthPermissions) {
+                            permissionLauncher.launch(viewModel.healthPermissions)
+                        } else {
+                            viewModel.syncAllRecords()
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(imageVector = Icons.Default.Sync, contentDescription = "Szinkronizálás", modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = "Összes korábbi mérés szinkronizálása most", fontSize = 12.sp)
+                    Text(text = "Összes korábbi mérés szinkronizálása", fontSize = 12.sp)
                 }
 
                 if (syncStatus != null) {
@@ -316,19 +407,20 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(text = "Reggeli mérés", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.height(2.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "Időpont: ${userSettings.morningReminderTime}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(text = userSettings.morningReminderTime, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = SlatePrimary)
+                            Spacer(modifier = Modifier.width(8.dp))
                             OutlinedButton(
                                 onClick = {
                                     showTimePicker(userSettings.morningReminderTime) { newTime ->
                                         viewModel.setMorningReminder(userSettings.morningReminderEnabled, newTime)
                                     }
                                 },
-                                modifier = Modifier.height(28.dp),
-                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 6.dp)
+                                modifier = Modifier.height(26.dp),
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
                             ) {
                                 Text("Módosítás", fontSize = 10.sp)
                             }
@@ -348,19 +440,20 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(text = "Esti mérés", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.height(2.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "Időpont: ${userSettings.eveningReminderTime}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(text = userSettings.eveningReminderTime, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = SlatePrimary)
+                            Spacer(modifier = Modifier.width(8.dp))
                             OutlinedButton(
                                 onClick = {
                                     showTimePicker(userSettings.eveningReminderTime) { newTime ->
                                         viewModel.setEveningReminder(userSettings.eveningReminderEnabled, newTime)
                                     }
                                 },
-                                modifier = Modifier.height(28.dp),
-                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 6.dp)
+                                modifier = Modifier.height(26.dp),
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
                             ) {
                                 Text("Módosítás", fontSize = 10.sp)
                             }
@@ -498,7 +591,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "ESH / ESC Kategóriák",
+                        text = "ESH / ESC Határértékek (Hgmm)",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = SlatePrimary
@@ -507,12 +600,24 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                ReferenceRow("Optimális", "< 120 Hgmm", "< 80 Hgmm", CategoryOptimal)
-                ReferenceRow("Normál", "120 - 129 Hgmm", "80 - 84 Hgmm", CategoryNormal)
-                ReferenceRow("Emelkedett normál", "130 - 139 Hgmm", "85 - 89 Hgmm", CategoryHighNormal)
-                ReferenceRow("I. fokú hipertónia", "140 - 159 Hgmm", "90 - 99 Hgmm", CategoryGrade1)
-                ReferenceRow("II. fokú hipertónia", "160 - 179 Hgmm", "100 - 109 Hgmm", CategoryGrade2)
-                ReferenceRow("III. fokú hipertónia", "≥ 180 Hgmm", "≥ 110 Hgmm", CategoryGrade3)
+                // Fejléc
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Kategória", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.5f))
+                    Text("Szisztolés", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
+                    Text("Diasztolés", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.1f))
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                ReferenceRow("Optimális", "< 120", "< 80", CategoryOptimal)
+                ReferenceRow("Normál", "120 - 129", "80 - 84", CategoryNormal)
+                ReferenceRow("Emelkedett", "130 - 139", "85 - 89", CategoryHighNormal)
+                ReferenceRow("I. fokozat", "140 - 159", "90 - 99", CategoryGrade1)
+                ReferenceRow("II. fokozat", "160 - 179", "100 - 109", CategoryGrade2)
+                ReferenceRow("III. fokozat", "≥ 180", "≥ 110", CategoryGrade3)
             }
         }
     }
@@ -524,22 +629,31 @@ private fun ReferenceRow(name: String, sys: String, dia: String, color: Color) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 3.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.weight(1.5f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Box(
                 modifier = Modifier
-                    .size(8.dp)
+                    .size(7.dp)
                     .background(color, CircleShape)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(text = name, fontSize = 11.sp, fontWeight = FontWeight.Medium)
         }
         Text(
-            text = "$sys / $dia",
+            text = sys,
             fontSize = 11.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1.1f)
+        )
+        Text(
+            text = dia,
+            fontSize = 11.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1.1f)
         )
     }
 }

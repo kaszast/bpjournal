@@ -21,11 +21,47 @@ class HealthConnectHelper(private val context: Context) {
         private const val TAG = "HealthConnectHelper"
     }
 
+    val healthPermissions: Array<String> = arrayOf(
+        "android.permission.health.WRITE_BLOOD_PRESSURE",
+        "android.permission.health.READ_BLOOD_PRESSURE"
+    )
+
     /**
      * Ellenőrzi, hogy az adott eszközön elérhető-e a Health Connect integráció.
      */
     fun isHealthConnectAvailable(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+    }
+
+    /**
+     * Ellenőrzi, hogy a szükséges Health Connect jogosultságok meg vannak-e adva.
+     */
+    fun hasPermissions(): Boolean {
+        if (!isHealthConnectAvailable()) return false
+        val writeGranted = context.checkSelfPermission("android.permission.health.WRITE_BLOOD_PRESSURE") == android.content.pm.PackageManager.PERMISSION_GRANTED
+        val readGranted = context.checkSelfPermission("android.permission.health.READ_BLOOD_PRESSURE") == android.content.pm.PackageManager.PERMISSION_GRANTED
+        return writeGranted && readGranted
+    }
+
+    /**
+     * Health Connect jogosultságkezelő képernyő megnyitására szolgáló Intent.
+     */
+    fun getManagePermissionsIntent(): android.content.Intent {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            try {
+                android.content.Intent(android.health.connect.HealthConnectManager.ACTION_MANAGE_HEALTH_PERMISSIONS).apply {
+                    putExtra(android.content.Intent.EXTRA_PACKAGE_NAME, context.packageName)
+                }
+            } catch (e: Exception) {
+                android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = android.net.Uri.fromParts("package", context.packageName, null)
+                }
+            }
+        } else {
+            android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = android.net.Uri.fromParts("package", context.packageName, null)
+            }
+        }
     }
 
     /**
@@ -35,6 +71,11 @@ class HealthConnectHelper(private val context: Context) {
         if (!isHealthConnectAvailable()) {
             Log.i(TAG, "Health Connect natív keretrendszer nem érhető el az Android verzión (min API 34)")
             return HealthSyncResult.NotSupported
+        }
+
+        if (!hasPermissions()) {
+            Log.w(TAG, "Health Connect engedély hiányzik a szinkronizáláshoz!")
+            return HealthSyncResult.PermissionRequired
         }
 
         return try {

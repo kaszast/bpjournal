@@ -51,22 +51,22 @@ fun EshCategoryBadge(
                 color = bgColor.copy(alpha = 0.18f),
                 shape = RoundedCornerShape(20.dp)
             )
-            .padding(horizontal = 10.dp, vertical = 5.dp),
+            .padding(horizontal = 8.dp, vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = if (isAlert) Icons.Default.Warning else Icons.Default.CheckCircle,
             contentDescription = null,
             tint = bgColor,
-            modifier = Modifier.size(13.dp)
+            modifier = Modifier.size(12.dp)
         )
-        Spacer(modifier = Modifier.width(5.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = stringResource(id = labelRes).uppercase(),
             color = bgColor,
-            fontSize = 11.sp,
+            fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
-            letterSpacing = 0.5.sp
+            letterSpacing = 0.3.sp
         )
     }
 }

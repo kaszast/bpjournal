@@ -124,21 +124,21 @@ fun ExportScreen(
                         onClick = { selectedRange = ExportRange.ALL },
                         shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)
                     ) {
-                        Text(stringResource(R.string.export_range_all))
+                        Text("Összes", fontSize = 12.sp)
                     }
                     SegmentedButton(
                         selected = selectedRange == ExportRange.DAYS_30,
                         onClick = { selectedRange = ExportRange.DAYS_30 },
                         shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)
                     ) {
-                        Text(stringResource(R.string.export_range_30d))
+                        Text("30 nap", fontSize = 12.sp)
                     }
                     SegmentedButton(
                         selected = selectedRange == ExportRange.DAYS_90,
                         onClick = { selectedRange = ExportRange.DAYS_90 },
                         shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)
                     ) {
-                        Text(stringResource(R.string.export_range_90d))
+                        Text("90 nap", fontSize = 12.sp)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -203,9 +203,9 @@ fun ExportScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = SlatePrimary),
                     enabled = filteredEntries.isNotEmpty()
                 ) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Megosztás")
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "Megosztás", modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.export_pdf_button))
+                    Text(stringResource(R.string.export_pdf_button), fontSize = 13.sp)
                 }
             }
         }
@@ -261,9 +261,9 @@ fun ExportScreen(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = filteredEntries.isNotEmpty()
                 ) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Megosztás")
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "Megosztás", modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.export_csv_button))
+                    Text(stringResource(R.string.export_csv_button), fontSize = 13.sp)
                 }
             }
         }

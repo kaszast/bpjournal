@@ -82,6 +82,23 @@ fun MainAppScreen(viewModel: BloodPressureViewModel) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            if (selectedTab == 0 || selectedTab == 1) {
+                androidx.compose.material3.FloatingActionButton(
+                    onClick = { showAddDialog = true },
+                    containerColor = AccentTeal,
+                    contentColor = Color.White,
+                    shape = CircleShape,
+                    modifier = Modifier.size(54.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.record_new),
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+        },
         bottomBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -91,82 +108,31 @@ fun MainAppScreen(viewModel: BloodPressureViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
-                        .padding(horizontal = 8.dp),
+                        .height(60.dp)
+                        .padding(horizontal = 4.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // 1. Dashboard
-                    IconButton(
-                        onClick = { selectedTab = 0 },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Dashboard,
-                            contentDescription = stringResource(R.string.nav_dashboard),
-                            tint = if (selectedTab == 0) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+                    val navTabs = listOf(
+                        Triple(0, Icons.Default.Dashboard, R.string.nav_dashboard),
+                        Triple(1, Icons.Default.History, R.string.nav_history),
+                        Triple(2, Icons.Default.BarChart, R.string.nav_statistics),
+                        Triple(3, Icons.Default.IosShare, R.string.nav_export),
+                        Triple(4, Icons.Default.Settings, R.string.nav_settings)
+                    )
 
-                    // 2. History
-                    IconButton(
-                        onClick = { selectedTab = 1 },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.History,
-                            contentDescription = stringResource(R.string.nav_history),
-                            tint = if (selectedTab == 1) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    // 3. Központi Kiemelt Gomb (+)
-                    Box(
-                        modifier = Modifier.weight(1.2f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(AccentTeal, CircleShape)
-                                .clickable { showAddDialog = true },
-                            contentAlignment = Alignment.Center
+                    navTabs.forEach { (index, icon, labelRes) ->
+                        IconButton(
+                            onClick = { selectedTab = index },
+                            modifier = Modifier.weight(1f)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = stringResource(R.string.record_new),
-                                tint = Color.White,
-                                modifier = Modifier.size(28.dp)
+                                imageVector = icon,
+                                contentDescription = stringResource(labelRes),
+                                tint = if (selectedTab == index) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
+                                modifier = Modifier.size(24.dp)
                             )
                         }
-                    }
-
-                    // 4. Statistics / Insights
-                    IconButton(
-                        onClick = { selectedTab = 2 },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.BarChart,
-                            contentDescription = stringResource(R.string.nav_statistics),
-                            tint = if (selectedTab == 2) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    // 5. Settings / Beállítások
-                    IconButton(
-                        onClick = { selectedTab = 4 },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.nav_settings),
-                            tint = if (selectedTab == 4) AccentTeal else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
-                            modifier = Modifier.size(24.dp)
-                        )
                     }
                 }
             }

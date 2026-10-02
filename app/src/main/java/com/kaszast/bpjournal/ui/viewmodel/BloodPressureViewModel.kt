@@ -124,17 +124,42 @@ class BloodPressureViewModel(
     fun setEveningReminder(enabled: Boolean, time: String = userSettings.value.eveningReminderTime) = userSettingsManager.setEveningReminder(enabled, time)
     fun setThemeMode(mode: AppThemeMode) = userSettingsManager.setThemeMode(mode)
 
+    val healthPermissions: Array<String> get() = healthConnectHelper.healthPermissions
+
+    private val _hasHealthPermissions = MutableStateFlow(healthConnectHelper.hasPermissions())
+    val hasHealthPermissions = _hasHealthPermissions.asStateFlow()
+
+    fun refreshHealthPermissions() {
+        _hasHealthPermissions.value = healthConnectHelper.hasPermissions()
+    }
+
+    fun getManagePermissionsIntent() = healthConnectHelper.getManagePermissionsIntent()
+
     fun syncAllRecords() {
+        refreshHealthPermissions()
         viewModelScope.launch {
             val currentList = entries.value
             var successCount = 0
+            var lastErrorMsg: String? = null
             for (entry in currentList) {
-                val res = healthConnectHelper.syncBloodPressureRecord(entry)
-                if (res is com.kaszast.bpjournal.health.HealthSyncResult.Success) {
-                    successCount++
+                when (val res = healthConnectHelper.syncBloodPressureRecord(entry)) {
+                    is com.kaszast.bpjournal.health.HealthSyncResult.Success -> successCount++
+                    is com.kaszast.bpjournal.health.HealthSyncResult.PermissionRequired -> {
+                        lastErrorMsg = "Hiányzik a Health Connect írási engedély! Kérjük, adja meg az engedélyt a gombra kattintva."
+                    }
+                    is com.kaszast.bpjournal.health.HealthSyncResult.Error -> {
+                        lastErrorMsg = "Hiba: ${res.message}"
+                    }
+                    is com.kaszast.bpjournal.health.HealthSyncResult.NotSupported -> {
+                        lastErrorMsg = "A Health Connect nem támogatott ezen az Android verzión."
+                    }
                 }
             }
-            _syncStatusMessage.value = "$successCount / ${currentList.size} mérés sikeresen szinkronizálva a Health Connect-be."
+            if (lastErrorMsg != null && successCount == 0) {
+                _syncStatusMessage.value = lastErrorMsg
+            } else {
+                _syncStatusMessage.value = "$successCount / ${currentList.size} mérés sikeresen szinkronizálva a Health Connect-be."
+            }
         }
     }
 

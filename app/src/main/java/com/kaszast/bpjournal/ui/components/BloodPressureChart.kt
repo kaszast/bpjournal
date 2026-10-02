@@ -65,13 +65,14 @@ fun BloodPressureChart(
             ) {
                 Text(
                     text = "Vérnyomás trendek",
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "(elmúlt 7 nap)",
-                    fontSize = 12.sp,
+                    text = "Elmúlt 7 nap",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -202,7 +203,7 @@ fun BloodPressureChart(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Célzóna felirat és alsó skála
+            // Célzóna felirat és alsó dátumok
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -210,19 +211,21 @@ fun BloodPressureChart(
             ) {
                 Text(
                     text = dataPoints.first().periodLabel.takeLast(5),
-                    fontSize = 10.sp,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "NORMÁL CÉLTARTOMÁNY (80-120 Hgmm)",
-                    fontSize = 9.sp,
+                    text = "Célsáv: 80-120 Hgmm",
+                    fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = if (isDark) DarkDiastolic else LightDiastolic
                 )
                 if (dataPoints.size > 1) {
                     Text(
                         text = dataPoints.last().periodLabel.takeLast(5),
-                        fontSize = 10.sp,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

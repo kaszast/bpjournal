@@ -202,15 +202,7 @@ fun DashboardScreen(
                             }
 
                             // Jobb oldal: PulseRing pulzusgyűrű
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                PulseRing(pulse = latest.pulse)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "Normál pulzus",
-                                    fontSize = 11.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
+                            PulseRing(pulse = latest.pulse)
                         }
                     }
                 }
