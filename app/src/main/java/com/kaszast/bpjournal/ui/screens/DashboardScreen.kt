@@ -1,5 +1,6 @@
 package com.kaszast.bpjournal.ui.screens
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,11 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -37,8 +43,13 @@ import com.kaszast.bpjournal.R
 import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.ui.components.BloodPressureCard
 import com.kaszast.bpjournal.ui.components.BloodPressureChart
-import com.kaszast.bpjournal.ui.theme.SlatePrimary
+import com.kaszast.bpjournal.ui.components.EshCategoryBadge
+import com.kaszast.bpjournal.ui.components.PulseRing
+import com.kaszast.bpjournal.ui.theme.AccentMint
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun DashboardScreen(
@@ -48,19 +59,30 @@ fun DashboardScreen(
     val entries by viewModel.entries.collectAsState()
     val stats by viewModel.summaryStats.collectAsState()
     val chartData by viewModel.chartData.collectAsState()
+    val userSettings by viewModel.userSettings.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
+    val isDark = isSystemInDarkTheme()
+
+    val todayFormatted = remember {
+        val now = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.getDefault())
+        now.format(formatter).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+    }
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                shape = CircleShape,
+                containerColor = AccentMint,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(58.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.record_new)
+                    contentDescription = stringResource(R.string.record_new),
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
@@ -72,83 +94,141 @@ fun DashboardScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Fejléc
+            // Fejléc (Üdvözlés és Dátum)
             item {
                 Column {
                     Text(
                         text = "BPJournal",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = SlatePrimary
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "Keringési és Vérnyomás Napló",
+                        text = todayFormatted,
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
+            // Fő Kiemelt Kártya (Latest Reading / Legutóbbi Mérés)
+            val latest = entries.firstOrNull()
+            if (latest != null) {
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(defaultElevation = if (isDark) 0.dp else 2.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "LEGUTÓBBI MÉRÉS",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    text = latest.formattedDateTime().takeLast(5),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                // Bal oldal: 120 / 80 Hgmm és Normal kapszula
+                                Column {
+                                    Row(verticalAlignment = Alignment.Bottom) {
+                                        Text(
+                                            text = "${latest.systolic}",
+                                            fontSize = 42.sp,
+                                            fontWeight = FontWeight.Black,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                        Text(
+                                            text = " / ",
+                                            fontSize = 32.sp,
+                                            fontWeight = FontWeight.Light,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Text(
+                                            text = "${latest.diastolic}",
+                                            fontSize = 42.sp,
+                                            fontWeight = FontWeight.Black,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(
+                                            text = "Hgmm",
+                                            fontSize = 13.sp,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        EshCategoryBadge(category = latest.category)
+                                    }
+                                }
+
+                                // Jobb oldal: Köríves pulzusgyűrű
+                                PulseRing(pulse = latest.pulse)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Trendgrafikon Célzónával
+            item {
+                BloodPressureChart(dataPoints = chartData.takeLast(10))
+            }
+
             // Statisztikai minikártyák sor
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    DashboardStatCard(
+                    MiniStatCard(
                         title = "Átlag Szisztolés",
-                        value = if (stats.totalCount > 0) "${stats.avgSystolic.toInt()} Hgmm" else "--",
-                        subtitle = "Cél: <120",
+                        value = if (stats.totalCount > 0) "${stats.avgSystolic.toInt()}" else "--",
+                        unit = "Hgmm",
                         modifier = Modifier.weight(1f)
                     )
-                    DashboardStatCard(
+                    MiniStatCard(
                         title = "Átlag Diasztolés",
-                        value = if (stats.totalCount > 0) "${stats.avgDiastolic.toInt()} Hgmm" else "--",
-                        subtitle = "Cél: <80",
+                        value = if (stats.totalCount > 0) "${stats.avgDiastolic.toInt()}" else "--",
+                        unit = "Hgmm",
                         modifier = Modifier.weight(1f)
                     )
-                    DashboardStatCard(
+                    MiniStatCard(
                         title = "Átlag Pulzus",
-                        value = if (stats.totalCount > 0) "${stats.avgPulse.toInt()} BPM" else "--",
-                        subtitle = "${stats.totalCount} mérés",
+                        value = if (stats.totalCount > 0) "${stats.avgPulse.toInt()}" else "--",
+                        unit = "BPM",
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
 
-            // Legutóbbi mérés
-            val latest = entries.firstOrNull()
-            if (latest != null) {
-                item {
-                    Text(
-                        text = stringResource(R.string.latest_measurement),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BloodPressureCard(
-                        entry = latest,
-                        onDeleteClick = { viewModel.deleteEntry(latest.id) }
-                    )
-                }
-            }
-
-            // Trendgrafikon előnézet
-            if (chartData.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Trend és Dinamika",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BloodPressureChart(dataPoints = chartData.takeLast(14))
-                }
-            }
-
-            // Friss mérések szekció
+            // Legutóbbi mérések lista
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -157,9 +237,14 @@ fun DashboardScreen(
                 ) {
                     Text(
                         text = "Legutóbbi Rögzítések",
-                        fontSize = 16.sp,
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "${entries.size} mérés",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -168,8 +253,8 @@ fun DashboardScreen(
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     ) {
                         Column(
                             modifier = Modifier
@@ -196,8 +281,6 @@ fun DashboardScreen(
         }
     }
 
-    val userSettings by viewModel.userSettings.collectAsState()
-
     if (showAddDialog) {
         AddEditEntryDialog(
             defaultArm = userSettings.defaultArm,
@@ -212,22 +295,23 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun DashboardStatCard(
+private fun MiniStatCard(
     title: String,
     value: String,
-    subtitle: String,
+    unit: String,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isDark) 0.dp else 1.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(12.dp)
         ) {
             Text(
                 text = title,
@@ -235,18 +319,21 @@ private fun DashboardStatCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = value,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = SlatePrimary
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = subtitle,
-                fontSize = 9.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = unit,
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 2.dp)
+                )
+            }
         }
     }
 }

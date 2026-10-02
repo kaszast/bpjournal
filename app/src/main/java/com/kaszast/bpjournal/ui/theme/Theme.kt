@@ -7,39 +7,39 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val LightColorScheme = lightColorScheme(
-    primary = SlatePrimary,
-    onPrimary = SlateOnPrimary,
-    primaryContainer = SlatePrimaryLight,
-    onPrimaryContainer = SlatePrimary,
-    secondary = TealSecondary,
-    onSecondary = TealOnSecondary,
-    secondaryContainer = TealSecondaryLight,
-    onSecondaryContainer = TealSecondary,
-    background = SlateBackground,
-    onBackground = SlateTextPrimary,
-    surface = SlateSurface,
-    onSurface = SlateTextPrimary,
-    surfaceVariant = SlateSurfaceVariant,
-    onSurfaceVariant = SlateTextSecondary,
-    outline = SlateOutline
+    primary = AccentTeal,
+    onPrimary = LightCardBg,
+    primaryContainer = LightTargetZone,
+    onPrimaryContainer = LightTextPrimary,
+    secondary = AccentMint,
+    onSecondary = LightCardBg,
+    secondaryContainer = LightTargetZone,
+    onSecondaryContainer = LightTextPrimary,
+    background = LightBg,
+    onBackground = LightTextPrimary,
+    surface = LightCardBg,
+    onSurface = LightTextPrimary,
+    surfaceVariant = LightBg,
+    onSurfaceVariant = LightTextSecondary,
+    outline = LightCardBorder
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = SlateDarkPrimary,
-    onPrimary = SlateDarkBackground,
-    primaryContainer = SlatePrimary,
-    onPrimaryContainer = SlateDarkPrimary,
-    secondary = TealSecondaryLight,
-    onSecondary = SlateDarkBackground,
-    secondaryContainer = TealSecondary,
-    onSecondaryContainer = TealSecondaryLight,
-    background = SlateDarkBackground,
-    onBackground = SlateDarkTextPrimary,
-    surface = SlateDarkSurface,
-    onSurface = SlateDarkTextPrimary,
-    surfaceVariant = SlateDarkSurfaceVariant,
-    onSurfaceVariant = SlateDarkTextSecondary,
-    outline = SlateDarkSurfaceVariant
+    primary = DarkPulseTeal,
+    onPrimary = DarkBg,
+    primaryContainer = DarkTargetZone,
+    onPrimaryContainer = DarkTextPrimary,
+    secondary = DarkDiastolic,
+    onSecondary = DarkBg,
+    secondaryContainer = DarkCardBg,
+    onSecondaryContainer = DarkTextPrimary,
+    background = DarkBg,
+    onBackground = DarkTextPrimary,
+    surface = DarkCardBg,
+    onSurface = DarkTextPrimary,
+    surfaceVariant = DarkCardBg,
+    onSurfaceVariant = DarkTextSecondary,
+    outline = DarkCardBorder
 )
 
 @Composable

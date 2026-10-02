@@ -2,35 +2,51 @@ package com.kaszast.bpjournal.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary Orvosi Paletta (Deep Slate Blue & Clinical Teal - NEM UV / NEM NEON)
-val SlatePrimary = Color(0xFF1E3A5F)
-val SlatePrimaryLight = Color(0xFFDCE8F5)
-val SlateOnPrimary = Color(0xFFFFFFFF)
+// Modern Soft Slate & Teal Paletta (5. verzió és Clinical Dark hibrid - ZÉRÓ UV / ZÉRÓ LILA)
 
-val TealSecondary = Color(0xFF0F766E)
-val TealSecondaryLight = Color(0xFFCCFBF1)
-val TealOnSecondary = Color(0xFFFFFFFF)
+// Light Mode színek
+val LightBg = Color(0xFFF3F6FA)              // Lágy felhőfehér háttér
+val LightCardBg = Color(0xFFFFFFFF)          // Hófehér kártyák
+val LightCardBorder = Color(0xFFE2E8F0)      // Finom kártyaszegély
+val LightTextPrimary = Color(0xFF0F172A)     // Mély pala fekete
+val LightTextSecondary = Color(0xFF64748B)   // Finom grafitszürke
+val LightSystolic = Color(0xFF1E3A8A)        // Mélykék szisztolés vonal
+val LightDiastolic = Color(0xFF10B981)       // Mentazöld diasztolés vonal
+val LightTargetZone = Color(0xFFD1FAE5)      // Célzóna áttetsző zöld sáv
+val LightPulseTeal = Color(0xFF0D9488)       // Pulzus gyűrű menta
 
-val SlateBackground = Color(0xFFF8FAFC)
-val SlateSurface = Color(0xFFFFFFFF)
-val SlateSurfaceVariant = Color(0xFFF1F5F9)
-val SlateOutline = Color(0xFFCBD5E1)
-val SlateTextPrimary = Color(0xFF0F172A)
-val SlateTextSecondary = Color(0xFF475569)
+// Dark Mode színek (Pontosan a mellékelt Clinical Dark kép szerint)
+val DarkBg = Color(0xFF090D14)               // Mélyfekete háttér
+val DarkCardBg = Color(0xFF131B29)           // Matt sötét pala kártya
+val DarkCardBorder = Color(0xFF1E293B)       // Sötét szegély
+val DarkTextPrimary = Color(0xFFF8FAFC)      // Hófehér tipográfia
+val DarkTextSecondary = Color(0xFF94A3B8)    // Világosszürke felirat
+val DarkSystolic = Color(0xFF38BDF8)         // Világoskék szisztolés görbe
+val DarkDiastolic = Color(0xFF34D399)        // Élénk menta diasztolés görbe
+val DarkTargetZone = Color(0xFF064E3B)       // Sötét célzóna sáv
+val DarkPulseTeal = Color(0xFF14B8A6)        // Menta pulzus jelző
 
-// Dark Mode színek
-val SlateDarkPrimary = Color(0xFF93C5FD)
-val SlateDarkBackground = Color(0xFF0F172A)
-val SlateDarkSurface = Color(0xFF1E293B)
-val SlateDarkSurfaceVariant = Color(0xFF334155)
-val SlateDarkTextPrimary = Color(0xFFF8FAFC)
-val SlateDarkTextSecondary = Color(0xFF94A3B8)
+// Általános akcentusok
+val AccentMint = Color(0xFF10B981)
+val AccentTeal = Color(0xFF0D9488)
+val AccentBlue = Color(0xFF2563EB)
 
-// Orvosi ESH Kategória Színek
-val CategoryOptimal = Color(0xFF16A34A)       // Zöld
-val CategoryNormal = Color(0xFF0D9488)        // Kékeszöld
-val CategoryHighNormal = Color(0xFFD97706)    // Borostyán
-val CategoryGrade1 = Color(0xFFEA580C)        // Narancs/Korall
-val CategoryGrade2 = Color(0xFFDC2626)        // Piros
-val CategoryGrade3 = Color(0xFF991B1B)        // Sötétpiros / Bordó
-val CategoryIsolated = Color(0xFFC2410C)      // Terrakotta
+// ESH Kategória Színek (Természetes orvosi paletta)
+val CatOptimal = Color(0xFF10B981)           // Menta zöld
+val CatNormal = Color(0xFF0D9488)            // Teal zöld
+val CatHighNormal = Color(0xFFF59E0B)        // Meleg borostyán
+val CatGrade1 = Color(0xFFF97316)            // Narancs
+val CatGrade2 = Color(0xFFEF4444)            // Korall piros
+val CatGrade3 = Color(0xFFB91C1C)            // Sötét vörös
+val CatIsolated = Color(0xFFEA580C)          // Terrakotta
+
+// Kompatibilitási aliasok
+val SlatePrimary = AccentTeal
+val TealSecondary = AccentMint
+val CategoryOptimal = CatOptimal
+val CategoryNormal = CatNormal
+val CategoryHighNormal = CatHighNormal
+val CategoryGrade1 = CatGrade1
+val CategoryGrade2 = CatGrade2
+val CategoryGrade3 = CatGrade3
+val CategoryIsolated = CatIsolated

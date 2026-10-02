@@ -1,5 +1,6 @@
 package com.kaszast.bpjournal.ui.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -36,8 +37,8 @@ import com.kaszast.bpjournal.R
 import com.kaszast.bpjournal.model.Arm
 import com.kaszast.bpjournal.model.BloodPressureEntry
 import com.kaszast.bpjournal.model.BodyPosition
-import com.kaszast.bpjournal.ui.theme.SlatePrimary
-import com.kaszast.bpjournal.ui.theme.TealSecondary
+import com.kaszast.bpjournal.ui.theme.AccentMint
+import com.kaszast.bpjournal.ui.theme.DarkPulseTeal
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -47,20 +48,23 @@ fun BloodPressureCard(
     onDeleteClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
+    val pulseColor = if (isDark) DarkPulseTeal else AccentMint
+
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isDark) 0.dp else 1.5.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(16.dp)
         ) {
-            // Felső sor: Időpont és ESH Jelvény
+            // Felső sor: Dátum/Idő és Akciók
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -68,99 +72,134 @@ fun BloodPressureCard(
             ) {
                 Text(
                     text = entry.formattedDateTime(),
-                    fontSize = 13.sp,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                EshCategoryBadge(category = entry.category)
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (onEditClick != null) {
+                        IconButton(onClick = onEditClick, modifier = Modifier.size(28.dp)) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = stringResource(R.string.edit),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                    if (onDeleteClick != null) {
+                        IconButton(onClick = onDeleteClick, modifier = Modifier.size(28.dp)) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.delete),
+                                tint = Color(0xFFEF4444).copy(alpha = 0.8f),
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
-            // Fő értékek sor: Szisztolés / Diasztolés és Pulzus
+            // Fő értékek sor: 120 / 80 Hgmm és Pulzus
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
                         text = "${entry.systolic}",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = SlatePrimary
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = " / ",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Light,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = "${entry.diastolic}",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = SlatePrimary
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Hgmm",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier.padding(bottom = 5.dp)
                     )
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Pulse",
-                        tint = Color(0xFFDC2626),
-                        modifier = Modifier.size(16.dp)
+                        tint = pulseColor,
+                        modifier = Modifier.size(18.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "${entry.pulse}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "BPM",
+                            fontSize = 9.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // ESH Státusz Kapszula és Mutatók
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                EshCategoryBadge(category = entry.category)
+
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
-                        text = "${entry.pulse} BPM",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text = "PP: ${entry.pulsePressure}",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "MAP: ${entry.meanArterialPressure}",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "${if (entry.arm == Arm.LEFT) "Bal" else "Jobb"} • " +
+                                when (entry.position) {
+                                    BodyPosition.SITTING -> "Ülő"
+                                    BodyPosition.LYING -> "Fekvő"
+                                    BodyPosition.STANDING -> "Álló"
+                                },
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
-            // Pulzusnyomás és MAP adatok
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "PP: ${entry.pulsePressure} Hgmm",
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "MAP: ${entry.meanArterialPressure} Hgmm",
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "${if (entry.arm == Arm.LEFT) stringResource(R.string.arm_left) else stringResource(R.string.arm_right)} • " +
-                            when (entry.position) {
-                                BodyPosition.SITTING -> stringResource(R.string.position_sitting)
-                                BodyPosition.LYING -> stringResource(R.string.position_lying)
-                                BodyPosition.STANDING -> stringResource(R.string.position_standing)
-                            },
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Címkék (Tags) ha vannak
+            // Címkék ha vannak
             if (entry.tags.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -168,13 +207,13 @@ fun BloodPressureCard(
                     entry.tags.forEach { tag ->
                         AssistChip(
                             onClick = { },
-                            label = { Text(text = tag, fontSize = 11.sp) },
+                            label = { Text(text = tag, fontSize = 10.sp) },
                             colors = AssistChipDefaults.assistChipColors(
-                                containerColor = TealSecondary.copy(alpha = 0.08f),
-                                labelColor = TealSecondary
+                                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                                labelColor = MaterialTheme.colorScheme.primary
                             ),
                             border = null,
-                            modifier = Modifier.height(24.dp)
+                            modifier = Modifier.height(22.dp)
                         )
                     }
                 }
@@ -182,41 +221,12 @@ fun BloodPressureCard(
 
             // Megjegyzés ha van
             if (entry.notes.isNotBlank()) {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = entry.notes,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            }
-
-            // Akció gombok ha megadva
-            if (onEditClick != null || onDeleteClick != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    if (onEditClick != null) {
-                        IconButton(onClick = onEditClick, modifier = Modifier.size(32.dp)) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.edit),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                    if (onDeleteClick != null) {
-                        IconButton(onClick = onDeleteClick, modifier = Modifier.size(32.dp)) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.delete),
-                                tint = Color(0xFFDC2626).copy(alpha = 0.8f),
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
             }
         }
     }
