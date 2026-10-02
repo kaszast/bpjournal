@@ -12,5 +12,5 @@
   - `AddEditEntryDialog.kt`
 - [x] 5. Építés és egységtesztek futtatása (`./gradlew testDebugUnitTest assembleDebug`)
 - [x] 6. Eszköztesztelés valós telefonon (Xiaomi 15) adb-vel: angol nyelvre váltás és képernyőkép-ellenőrzés
-- [ ] 7. GitHub release publikálás a v105 tag-gel és APK-val (`scripts/publish_release.py`)
-- [ ] 8. Git commit és push a távoli repository-ba
+- [x] 7. GitHub release publikálás a v105 tag-gel és APK-val (`scripts/publish_release.py`)
+- [x] 8. Git commit és push a távoli repository-ba
