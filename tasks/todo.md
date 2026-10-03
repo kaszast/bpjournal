@@ -18,5 +18,5 @@
   - [x] Üres adatbázis tesztelése (nincs mintaadat)
   - [x] Emlékeztető tesztelése (teszt riasztás beállítása 1 percre, hang és értesítés ellenőrzése adb / képernyő mentés útján)
   - [x] Release AAB csomag előállítása és ellenőrzése
-- [ ] 5. GitHub Release és APK feltöltés a v109 taggel (`scripts/publish_release.py`)
+- [x] 5. GitHub Release és APK feltöltés a v109 taggel (`scripts/publish_release.py`)
 
