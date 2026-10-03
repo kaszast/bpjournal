@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.kaszast.bpjournal.model.Arm
 import com.kaszast.bpjournal.model.BodyPosition
+import com.kaszast.bpjournal.reminder.ReminderScheduler
+import com.kaszast.bpjournal.reminder.ReminderType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,12 +55,38 @@ data class UserSettings(
  * All modifications automatically persist to disk and emit updated state snapshots
  * to notify UI subscribers without requiring manual refreshes.
  */
-class UserSettingsManager(context: Context) {
+class UserSettingsManager(private val context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences("bpjournal_settings", Context.MODE_PRIVATE)
 
     private val _settings = MutableStateFlow(loadSettings())
     val settings: StateFlow<UserSettings> = _settings.asStateFlow()
+
+    init {
+        syncActiveReminders()
+    }
+
+    /**
+     * Ensures all enabled reminders are properly registered with [AlarmManager].
+     */
+    fun syncActiveReminders() {
+        val current = _settings.value
+        if (current.morningReminderEnabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.MORNING, current.morningReminderTime)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.MORNING)
+        }
+        if (current.noonReminderEnabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.NOON, current.noonReminderTime)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.NOON)
+        }
+        if (current.eveningReminderEnabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.EVENING, current.eveningReminderTime)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.EVENING)
+        }
+    }
 
     /**
      * Reads all settings from persistent storage, applying fallback defaults if keys are missing.
@@ -117,6 +145,11 @@ class UserSettingsManager(context: Context) {
             .putString(KEY_REMINDER_MORNING_TIME, time)
             .apply()
         _settings.value = _settings.value.copy(morningReminderEnabled = enabled, morningReminderTime = time)
+        if (enabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.MORNING, time)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.MORNING)
+        }
     }
 
     /**
@@ -128,6 +161,11 @@ class UserSettingsManager(context: Context) {
             .putString(KEY_REMINDER_NOON_TIME, time)
             .apply()
         _settings.value = _settings.value.copy(noonReminderEnabled = enabled, noonReminderTime = time)
+        if (enabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.NOON, time)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.NOON)
+        }
     }
 
     /**
@@ -139,6 +177,11 @@ class UserSettingsManager(context: Context) {
             .putString(KEY_REMINDER_EVENING_TIME, time)
             .apply()
         _settings.value = _settings.value.copy(eveningReminderEnabled = enabled, eveningReminderTime = time)
+        if (enabled) {
+            ReminderScheduler.scheduleReminder(context, ReminderType.EVENING, time)
+        } else {
+            ReminderScheduler.cancelReminder(context, ReminderType.EVENING)
+        }
     }
 
     /**

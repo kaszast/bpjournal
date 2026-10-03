@@ -93,7 +93,8 @@ fun AddEditEntryDialog(
 
     var selectedArm by remember { mutableStateOf(initialEntry?.arm ?: defaultArm) }
     var selectedPosition by remember { mutableStateOf(initialEntry?.position ?: defaultPosition) }
-    var selectedTags by remember { mutableStateOf(initialEntry?.tags ?: setOf("Nyugalmi")) }
+    val defaultRestingTag = stringResource(R.string.tag_resting)
+    var selectedTags by remember { mutableStateOf(initialEntry?.tags ?: setOf(defaultRestingTag)) }
     var notesText by remember { mutableStateOf(initialEntry?.notes ?: "") }
 
     val availableTags = listOf(

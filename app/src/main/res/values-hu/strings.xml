@@ -69,7 +69,7 @@
 
     <string name="welcome_title">ÜDVÖZÖLJÜK A BPJOURNAL-BAN</string>
     <string name="welcome_subtitle">Modern vérnyomásnapló és trendek</string>
-    <string name="welcome_desc">A prémium orvosi kártyák, a pulzusgyűrű és a célzónás trendgrafikon megtekintéséhez töltsön be mintaadatokat, vagy rögzítsen új mérést.</string>
+    <string name="welcome_desc">A prémium orvosi kártyák, a pulzusgyűrű és a célzónás trendgrafikon megtekintéséhez rögzítsen új mérést.</string>
     <string name="load_sample_data">Mintaadatok betöltése</string>
     <string name="new_reading_button">Új mérés (+)</string>
     <string name="recent_readings_title">Legutóbbi mérések</string>
@@ -155,4 +155,10 @@
 
     <string name="esh_reference_title">ESH / ESC Határértékek (%s)</string>
     <string name="esh_header_category">Kategória</string>
+
+    <string name="reminder_notification_title">Vérnyomásmérés ideje</string>
+    <string name="reminder_notification_body">Itt az ideje a vérnyomásmérés rögzítésének!</string>
+    <string name="notification_channel_name">Mérési emlékeztetők</string>
+    <string name="notification_channel_desc">Emlékeztetők a rendszeres vérnyomásméréshez</string>
+    <string name="notification_permission_required">Az értesítési engedély szükséges az emlékeztetők megjelenítéséhez.</string>
 </resources>

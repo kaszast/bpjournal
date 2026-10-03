@@ -1,9 +1,12 @@
 package com.kaszast.bpjournal.ui.screens
 
 import android.app.TimePickerDialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +52,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -102,6 +108,53 @@ fun SettingsScreen(
         } else {
             Toast.makeText(context, context.getString(R.string.toast_health_denied), Toast.LENGTH_LONG).show()
         }
+    }
+
+    var pendingReminderAction by remember { mutableStateOf<(() -> Unit)?>(null) }
+    var hasNotificationPermission by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
+            }
+        )
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasNotificationPermission = isGranted
+        if (isGranted) {
+            pendingReminderAction?.invoke()
+        } else {
+            Toast.makeText(
+                context,
+                context.getString(R.string.notification_permission_required),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        pendingReminderAction = null
+    }
+
+    fun checkAndToggleReminder(enabled: Boolean, onToggle: () -> Unit) {
+        if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val isGranted = ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            hasNotificationPermission = isGranted
+
+            if (!isGranted) {
+                pendingReminderAction = onToggle
+                notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                return
+            }
+        }
+        onToggle()
     }
 
     fun showTimePicker(currentTime: String, onTimePicked: (String) -> Unit) {
@@ -440,7 +493,11 @@ fun SettingsScreen(
                     }
                     Switch(
                         checked = userSettings.morningReminderEnabled,
-                        onCheckedChange = { viewModel.setMorningReminder(it) }
+                        onCheckedChange = { isChecked ->
+                            checkAndToggleReminder(isChecked) {
+                                viewModel.setMorningReminder(isChecked)
+                            }
+                        }
                     )
                 }
 
@@ -473,7 +530,11 @@ fun SettingsScreen(
                     }
                     Switch(
                         checked = userSettings.noonReminderEnabled,
-                        onCheckedChange = { viewModel.setNoonReminder(it) }
+                        onCheckedChange = { isChecked ->
+                            checkAndToggleReminder(isChecked) {
+                                viewModel.setNoonReminder(isChecked)
+                            }
+                        }
                     )
                 }
 
@@ -506,8 +567,29 @@ fun SettingsScreen(
                     }
                     Switch(
                         checked = userSettings.eveningReminderEnabled,
-                        onCheckedChange = { viewModel.setEveningReminder(it) }
+                        onCheckedChange = { isChecked ->
+                            checkAndToggleReminder(isChecked) {
+                                viewModel.setEveningReminder(isChecked)
+                            }
+                        }
                     )
+                }
+
+                if (!hasNotificationPermission && (userSettings.morningReminderEnabled || userSettings.noonReminderEnabled || userSettings.eveningReminderEnabled)) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Button(
+                        onClick = {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = SlatePrimary)
+                    ) {
+                        Icon(imageVector = Icons.Default.Notifications, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.notification_permission_required), fontSize = 11.sp)
+                    }
                 }
             }
         }

@@ -60,15 +60,7 @@ class BloodPressureViewModel(
             initialValue = emptyList()
         )
 
-    init {
-        // Pre-populate with sample clinical records on first launch if database is clean
-        viewModelScope.launch {
-            val existing = repository.getAllEntriesSync()
-            if (existing.isEmpty()) {
-                addSampleData()
-            }
-        }
-    }
+
 
     /**
      * Computed summary statistics (averages, min/max, distribution counts) derived from [entries].
@@ -202,26 +194,18 @@ class BloodPressureViewModel(
     }
 
     /**
-     * Populates 7 sample historical measurements covering the previous week.
+     * Checks if English language is currently active in user preferences or system locale.
      */
-    fun addSampleData() {
-        viewModelScope.launch {
-            val now = System.currentTimeMillis()
-            val dayMillis = 24L * 60 * 60 * 1000
-            val samples = listOf(
-                BloodPressureEntry(systolic = 118, diastolic = 78, pulse = 68, timestamp = now - 6 * dayMillis, notes = "Nyugodt reggel"),
-                BloodPressureEntry(systolic = 124, diastolic = 82, pulse = 72, timestamp = now - 5 * dayMillis, notes = "Munka után"),
-                BloodPressureEntry(systolic = 132, diastolic = 86, pulse = 76, timestamp = now - 4 * dayMillis, tags = setOf("Koffein"), notes = "Kávé után"),
-                BloodPressureEntry(systolic = 128, diastolic = 84, pulse = 70, timestamp = now - 3 * dayMillis, tags = setOf("Nyugalmi")),
-                BloodPressureEntry(systolic = 120, diastolic = 80, pulse = 71, timestamp = now - 2 * dayMillis, tags = setOf("Gyógyszer után")),
-                BloodPressureEntry(systolic = 138, diastolic = 88, pulse = 80, timestamp = now - 1 * dayMillis, tags = setOf("Stressz")),
-                BloodPressureEntry(systolic = 122, diastolic = 79, pulse = 69, timestamp = now, tags = setOf("Nyugalmi"), notes = "Mai mérés")
-            )
-            for (s in samples) {
-                repository.insertEntry(s)
-            }
+    fun isEnglishActive(): Boolean {
+        val lang = userSettings.value.appLanguage
+        return if (lang == "system") {
+            java.util.Locale.getDefault().language == "en"
+        } else {
+            lang == "en"
         }
     }
+
+
 
     /** Factory for injecting repository and helper dependencies into [BloodPressureViewModel]. */
     class Factory(

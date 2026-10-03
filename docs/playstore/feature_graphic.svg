@@ -1,0 +1,17 @@
+<svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="500" fill="#1E3A5F" />
+  
+  <!-- Finom pulzus díszítő háttér -->
+  <path d="M 0 250 L 150 250 L 180 200 L 220 300 L 250 220 L 280 250 L 1024 250" stroke="#14B8A6" stroke-opacity="0.25" stroke-width="5" fill="none" stroke-linecap="round" />
+
+  <!-- Ikon -->
+  <g transform="translate(130, 110) scale(2.6)">
+    <path fill="#14B8A6" d="M54,80 C54,80 26,63 26,41 C26,30 34,24 43.5,24 C49.5,24 53,27 54,29.5 C55,27 58.5,24 64.5,24 C74,24 82,30 82,41 C82,63 54,80 54,80 Z" />
+    <path stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M36,44 L45,44 L50,33 L54.5,55 L59.5,37 L63.5,44 L72,44" />
+  </g>
+
+  <!-- Feliratok -->
+  <text x="440" y="210" font-family="sans-serif" font-weight="bold" font-size="72" fill="#FFFFFF">BPJournal</text>
+  <text x="445" y="270" font-family="sans-serif" font-weight="bold" font-size="28" fill="#14B8A6">Vérnyomásnapló &amp; Elemzés</text>
+  <text x="445" y="315" font-family="sans-serif" font-size="20" fill="#CBD5E1">ESH / ESC orvosi besorolás • Health Connect szinkron</text>
+</svg>

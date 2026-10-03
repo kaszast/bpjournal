@@ -64,12 +64,17 @@ import com.kaszast.bpjournal.ui.theme.BPJournalTheme
 import com.kaszast.bpjournal.ui.viewmodel.BloodPressureViewModel
 import com.kaszast.bpjournal.util.LocaleHelper
 
+import android.content.Intent
+import androidx.compose.runtime.LaunchedEffect
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BloodPressureViewModel by viewModels {
         val app = application as BPJournalApplication
         BloodPressureViewModel.Factory(app.repository, app.healthConnectHelper, app.userSettingsManager)
     }
+
+    private var openRecordDialogTrigger by mutableStateOf(false)
 
     override fun attachBaseContext(newBase: Context) {
         val prefs = newBase.getSharedPreferences("bpjournal_settings", Context.MODE_PRIVATE)
@@ -81,6 +86,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        if (intent?.getBooleanExtra(EXTRA_OPEN_RECORD_DIALOG, false) == true) {
+            openRecordDialogTrigger = true
+        }
         setContent {
             val userSettings by viewModel.userSettings.collectAsState()
             val localizedContext = remember(userSettings.appLanguage) {
@@ -98,10 +106,26 @@ class MainActivity : ComponentActivity() {
                 LocalActivityResultRegistryOwner provides this@MainActivity
             ) {
                 BPJournalTheme(darkTheme = isDark) {
-                    MainAppScreen(viewModel = viewModel)
+                    MainAppScreen(
+                        viewModel = viewModel,
+                        openRecordTrigger = openRecordDialogTrigger,
+                        onResetRecordTrigger = { openRecordDialogTrigger = false }
+                    )
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_OPEN_RECORD_DIALOG, false)) {
+            openRecordDialogTrigger = true
+        }
+    }
+
+    companion object {
+        const val EXTRA_OPEN_RECORD_DIALOG = "extra_open_record_dialog"
     }
 }
 
@@ -118,10 +142,21 @@ private class LocalizedActivityContext(
 }
 
 @Composable
-fun MainAppScreen(viewModel: BloodPressureViewModel) {
+fun MainAppScreen(
+    viewModel: BloodPressureViewModel,
+    openRecordTrigger: Boolean = false,
+    onResetRecordTrigger: () -> Unit = {}
+) {
     var selectedTab by remember { mutableIntStateOf(0) }
     var showAddDialog by remember { mutableStateOf(false) }
     val userSettings by viewModel.userSettings.collectAsState()
+
+    LaunchedEffect(openRecordTrigger) {
+        if (openRecordTrigger) {
+            showAddDialog = true
+            onResetRecordTrigger()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

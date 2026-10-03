@@ -69,7 +69,7 @@
 
     <string name="welcome_title">WELCOME TO BPJOURNAL</string>
     <string name="welcome_subtitle">Modern blood pressure diary &amp; trends</string>
-    <string name="welcome_desc">To view clinical cards, pulse ring, and target zone trends, load sample data or record a new measurement.</string>
+    <string name="welcome_desc">To view clinical cards, pulse ring, and target zone trends, record a new measurement.</string>
     <string name="load_sample_data">Load Sample Data</string>
     <string name="new_reading_button">New Reading (+)</string>
     <string name="recent_readings_title">Recent Readings</string>
@@ -155,4 +155,10 @@
 
     <string name="esh_reference_title">ESH / ESC Guideline Thresholds (%s)</string>
     <string name="esh_header_category">Category</string>
+
+    <string name="reminder_notification_title">Blood Pressure Reminder</string>
+    <string name="reminder_notification_body">Time to record your blood pressure measurement.</string>
+    <string name="notification_channel_name">Measurement Reminders</string>
+    <string name="notification_channel_desc">Reminders for scheduled blood pressure measurements</string>
+    <string name="notification_permission_required">Notification permission is required to display measurement reminders.</string>
 </resources>

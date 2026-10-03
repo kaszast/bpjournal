@@ -141,11 +141,19 @@ blood pressure tracker, bp log, hypertension journal, systolic diastolic, pulse 
 
 A Google Play Áruházhoz készített nagyfelbontású (1080x2400) képernyőképek helye a repóban:
 
-| Képernyő | Magyar fájlnév (`docs/playstore/screenshots/hu/`) | Angol fájlnév (`docs/playstore/screenshots/en/`) | Kiemelt funkció |
-| :--- | :--- | :--- | :--- |
-| **1. Áttekintés / Dashboard** | `01_dashboard.png` | `01_dashboard.png` | Legutóbbi mérés, pulzusgyűrű, 7 napos trendgrafikon, legutóbbi előzmények |
-| **2. Új mérés / Add Entry** | `02_add_measurement.png` | `02_add_measurement.png` | Gördíthető dobválasztók (ST/DST/BPM), kar, testhelyzet, kontextus címkék |
-| **3. Előzmények / History** | `03_history.png` | `03_history.png` | Időrendi lista, színkódolt ESH kategóriajelzők, gyorskereső, szerkesztés |
-| **4. Statisztika / Analytics** | `04_statistics.png` | `04_statistics.png` | Napi/Heti/Havi bontás, ESH orvosi megoszlás progress barokkal, időszaki átlagok |
-| **5. Export / Export** | `05_export.png` | `05_export.png` | Időszak szűrés (Összes/30/90 nap), nyomtatható A4 orvosi PDF lelet, CSV export |
-| **6. Beállítások / Settings** | `06_settings.png` | `06_settings.png` | Mérési alapértelmezések, Health Connect szinkron, napi 3 emlékeztető, nyelvválasztó |
+### Sötét téma (Dark theme)
+- **Magyar:** `docs/playstore/screenshots/hu/`
+- **Angol:** `docs/playstore/screenshots/en/`
+
+### Világos téma (Light theme)
+- **Magyar:** `docs/playstore/screenshots/hu_light/`
+- **Angol:** `docs/playstore/screenshots/en_light/`
+
+| Képernyő | Fájlnév | Kiemelt funkció |
+| :--- | :--- | :--- |
+| **1. Áttekintés / Dashboard** | `01_dashboard.png` | Legutóbbi mérés, pulzusgyűrű, 7 napos trendgrafikon, legutóbbi előzmények |
+| **2. Új mérés / Add Entry** | `02_add_measurement.png` | Gördíthető dobválasztók (ST/DST/BPM), kar, testhelyzet, kontextus címkék |
+| **3. Előzmények / History** | `03_history.png` | Időrendi lista, színkódolt ESH kategóriajelzők, gyorskereső, szerkesztés |
+| **4. Statisztika / Analytics** | `04_statistics.png` | Napi/Heti/Havi bontás, ESH orvosi megoszlás progress barokkal, időszaki átlagok |
+| **5. Export / Export** | `05_export.png` | Időszak szűrés (Összes/30/90 nap), nyomtatható A4 orvosi PDF lelet, CSV export |
+| **6. Beállítások / Settings** | `06_settings.png` | Mérési alapértelmezések, Health Connect szinkron, napi 3 emlékeztető, nyelvválasztó |
